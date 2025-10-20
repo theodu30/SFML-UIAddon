@@ -3,7 +3,7 @@
 
 int main()
 {
-	UIPanel panel;
+	sfui::UIPanel panel;
     panel.doNothing();
 
     sf::RenderWindow window(sf::VideoMode({ 200, 200 }), "SFML works!");

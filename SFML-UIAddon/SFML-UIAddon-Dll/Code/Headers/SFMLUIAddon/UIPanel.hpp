@@ -2,11 +2,14 @@
 
 #include "Exports.hpp"
 
-class SFMLUIADDON_API UIPanel
+namespace sfui
 {
-	// Exemple to see if dll is working
-public:
-	UIPanel() = default;
-	~UIPanel() = default;
-	void doNothing();
-};
+	class SFMLUIADDON_API UIPanel
+	{
+		// Exemple to see if dll is working
+	public:
+		UIPanel() = default;
+		~UIPanel() = default;
+		void doNothing();
+	};
+}

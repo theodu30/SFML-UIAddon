@@ -1,5 +1,8 @@
 #include "Headers/SFMLUIAddon/UIPanel.hpp"
 
-void UIPanel::doNothing()
+namespace sfui
 {
+	void UIPanel::doNothing()
+	{
+	}
 }
