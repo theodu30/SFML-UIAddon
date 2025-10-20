@@ -1,12 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFMLUIAddon/UIPanel.hpp>
 
+#include <iostream>
+
 int main()
 {
-	sfui::UIPanel panel;
-    panel.doNothing();
+    sfui::UIPanel panel;
+    panel.setActive(true);
 
-    sf::RenderWindow window(sf::VideoMode({ 200, 200 }), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode({ 200, 200 }), "SFML works!");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
