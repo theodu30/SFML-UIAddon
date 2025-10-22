@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\Headers\SFMLUIAddon\Exports.hpp" />
-    <ClInclude Include="Code\Headers\SFMLUIAddon\UIPanel.hpp" />
+    <ClInclude Include="Code\Headers\SFUIL\System\Anchor.hpp" />
+    <ClInclude Include="Code\Headers\SFUIL\System\Exports.hpp" />
+    <ClInclude Include="Code\Headers\SFUIL\UIPanel.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\Anchor.cpp" />
     <ClCompile Include="Code\UIPanel.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -119,7 +121,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;SFMLUIADDONDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;SFUIL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -146,7 +148,7 @@ xcopy "$(OutDir)*.pdb" "$(SolutionDir)$(Platform)\$(Configuration)\" /v /y /s</C
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;SFMLUIADDONDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;SFUIL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>

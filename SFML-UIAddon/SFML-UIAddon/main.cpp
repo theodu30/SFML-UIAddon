@@ -1,27 +1,38 @@
 #include <SFML/Graphics.hpp>
-#include <SFMLUIAddon/UIPanel.hpp>
+#include <SFUIL/UIPanel.hpp>
 
 #include <iostream>
 
 int main()
 {
-    sfui::UIPanel panel;
-    panel.setActive(true);
+	sf::RenderWindow window(sf::VideoMode({ 1280, 720 }), "SFML works!");
+	sf::CircleShape shape(100.f);
+	shape.setFillColor(sf::Color::Green);
+	shape.setPosition(sf::Vector2f(window.getSize()) * .5f);
+	shape.setOrigin(sf::Vector2f(shape.getRadius(), shape.getRadius()));
 
-	sf::RenderWindow window(sf::VideoMode({ 200, 200 }), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+	sfui::UIPanel panel;
+	panel.setActive(true);
+	panel.setAlignment(sfui::Alignment::MiddleCenter);
+	panel.setSize(window.getSize());
 
-    while (window.isOpen())
-    {
-        while (const std::optional event = window.pollEvent())
-        {
-            if (event->is<sf::Event::Closed>())
-                window.close();
-        }
+	while (window.isOpen())
+	{
+		while (const std::optional event = window.pollEvent())
+		{
+			if (event->is<sf::Event::Closed>())
+				window.close();
+			if (event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->code == sf::Keyboard::Key::Escape)
+				window.close();
+		}
 
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
+		panel.render();
+
+		window.clear();
+		window.draw(shape);
+
+		panel.drawToTarget(window);
+
+		window.display();
+	}
 }

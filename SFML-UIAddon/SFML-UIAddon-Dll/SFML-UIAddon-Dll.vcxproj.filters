@@ -15,15 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\Headers\SFMLUIAddon\UIPanel.hpp">
+    <ClInclude Include="Code\Headers\SFUIL\UIPanel.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Headers\SFMLUIAddon\Exports.hpp">
+    <ClInclude Include="Code\Headers\SFUIL\System\Exports.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Headers\SFUIL\System\Anchor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\UIPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Anchor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
