@@ -2,6 +2,16 @@
 
 namespace sfui
 {
+	inline constexpr Alignment Alignment::UpperLeft = Alignment(HorizontalAlignment::Left, VerticalAlignment::Upper);
+	inline constexpr Alignment Alignment::MiddleLeft = Alignment(HorizontalAlignment::Left, VerticalAlignment::Middle);
+	inline constexpr Alignment Alignment::LowerLeft = Alignment(HorizontalAlignment::Left, VerticalAlignment::Lower);
+	inline constexpr Alignment Alignment::UpperCenter = Alignment(HorizontalAlignment::Center, VerticalAlignment::Upper);
+	inline constexpr Alignment Alignment::MiddleCenter = Alignment(HorizontalAlignment::Center, VerticalAlignment::Middle);
+	inline constexpr Alignment Alignment::LowerCenter = Alignment(HorizontalAlignment::Center, VerticalAlignment::Lower);
+	inline constexpr Alignment Alignment::UpperRight = Alignment(HorizontalAlignment::Right, VerticalAlignment::Upper);
+	inline constexpr Alignment Alignment::MiddleRight = Alignment(HorizontalAlignment::Right, VerticalAlignment::Middle);
+	inline constexpr Alignment Alignment::LowerRight = Alignment(HorizontalAlignment::Right, VerticalAlignment::Lower);
+
 	constexpr Alignment::Alignment(HorizontalAlignment _alignX, VerticalAlignment _alignY)
 	{
 		alignX = _alignX;
@@ -45,20 +55,20 @@ namespace sfui
 		return *this;
 	}
 
+	HorizontalAlignment Alignment::getHorizontalAlignment() const noexcept
+	{
+		return alignX;
+	}
+
+	VerticalAlignment Alignment::getVerticalAlignment() const noexcept
+	{
+		return alignY;
+	}
+
 	constexpr bool Alignment::operator==(const Alignment& _other) const
 	{
 		return (alignX == _other.alignX) && (alignY == _other.alignY);
 	}
-
-	inline constexpr Alignment Alignment::UpperLeft = Alignment(HorizontalAlignment::Left, VerticalAlignment::Upper);
-	inline constexpr Alignment Alignment::MiddleLeft = Alignment(HorizontalAlignment::Left, VerticalAlignment::Middle);
-	inline constexpr Alignment Alignment::LowerLeft = Alignment(HorizontalAlignment::Left, VerticalAlignment::Lower);
-	inline constexpr Alignment Alignment::UpperCenter = Alignment(HorizontalAlignment::Center, VerticalAlignment::Upper);
-	inline constexpr Alignment Alignment::MiddleCenter = Alignment(HorizontalAlignment::Center, VerticalAlignment::Middle);
-	inline constexpr Alignment Alignment::LowerCenter = Alignment(HorizontalAlignment::Center, VerticalAlignment::Lower);
-	inline constexpr Alignment Alignment::UpperRight = Alignment(HorizontalAlignment::Right, VerticalAlignment::Upper);
-	inline constexpr Alignment Alignment::MiddleRight = Alignment(HorizontalAlignment::Right, VerticalAlignment::Middle);
-	inline constexpr Alignment Alignment::LowerRight = Alignment(HorizontalAlignment::Right, VerticalAlignment::Lower);
 
 	const sf::Vector2u Anchor::getAnchoredPosition(
 		const sf::Vector2u& _parentSize,
@@ -71,7 +81,7 @@ namespace sfui
 		int posY = 0;
 
 		// Horizontal Alignment
-		switch (_alignment.alignX)
+		switch (_alignment.getHorizontalAlignment())
 		{
 		case HorizontalAlignment::Left:
 			posX = 0;
@@ -85,7 +95,7 @@ namespace sfui
 		}
 
 		// Vertical Alignment
-		switch (_alignment.alignY)
+		switch (_alignment.getVerticalAlignment())
 		{
 		case VerticalAlignment::Upper:
 			posY = 0;

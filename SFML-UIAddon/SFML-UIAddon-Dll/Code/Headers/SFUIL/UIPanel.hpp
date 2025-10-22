@@ -8,6 +8,10 @@
 
 namespace sfui
 {
+	/// <summary>
+	/// <paragraph>UIPanel is a container for UI Elements that renders them onto a RenderTexture.</paragraph>
+	/// <paragraph>It can be drawn onto any RenderTarget.</paragraph>
+	/// </summary>
 	class SFUIL_API UIPanel
 	{
 	public:
