@@ -22,6 +22,8 @@
     <ClInclude Include="Code\Headers\SFUIL\System\Anchor.hpp" />
     <ClInclude Include="Code\Headers\SFUIL\System\Exports.hpp" />
     <ClInclude Include="Code\Headers\SFUIL\UIPanel.hpp" />
+    <ClInclude Include="Code\Headers\SFUIL\UIElement.hpp" />
+    <ClInclude Include="Code\Headers\SFUIL\System\UIElementProperty.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Anchor.cpp" />

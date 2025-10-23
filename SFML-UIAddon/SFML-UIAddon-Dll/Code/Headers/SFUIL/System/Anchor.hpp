@@ -9,7 +9,7 @@ namespace sfui
 	/// <summary>
 	/// <paragraph>Defines vertical alignment options.</paragraph>
 	/// </summary>
-	enum VerticalAlignment
+	enum class SFUIL_API VerticalAlignment : char
 	{
 		Upper,
 		Middle,
@@ -19,7 +19,7 @@ namespace sfui
 	/// <summary>
 	/// <paragraph>Defines horizontal alignment options.</paragraph>
 	/// </summary>
-	enum HorizontalAlignment
+	enum class SFUIL_API HorizontalAlignment : char
 	{
 		Left,
 		Center,
@@ -29,41 +29,17 @@ namespace sfui
 	/// <summary>
 	/// <paragraph>Defines an alignment using horizontal and vertical alignment.</paragraph>
 	/// </summary>
-	class SFUIL_API Alignment
+	struct SFUIL_API Alignment
 	{
-	public:
-		/// <summary>
-		/// <paragraph>Constructs an Alignment with default values (Left, Upper).</paragraph>
-		/// </summary>
-		constexpr Alignment() = default;
+		HorizontalAlignment m_alignX = HorizontalAlignment::Left;
+		VerticalAlignment m_alignY = VerticalAlignment::Upper;
+	};
 
-		/// <summary>
-		/// <paragraph>Constructs an Alignment with the given horizontal and vertical alignment.</paragraph>
-		/// </summary>
-		/// <param name="_alignX">The horizontal alignment.</param>
-		/// <param name="_alignY">The vertical alignment.</param>
-		constexpr Alignment(HorizontalAlignment _alignX, VerticalAlignment _alignY);
-
-		~Alignment() = default;
-		Alignment(const Alignment& _other);
-		Alignment& operator=(const Alignment& _other);
-		Alignment(Alignment&& _other) noexcept;
-		Alignment& operator=(Alignment&& _other) noexcept;
-
-		/// <summary>
-		/// <paragraph>Returns the horizontal alignment.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		HorizontalAlignment getHorizontalAlignment() const noexcept;
-
-		/// <summary>
-		/// <paragraph>Returns the vertical alignment.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		VerticalAlignment getVerticalAlignment() const noexcept;
-
-		[[nodiscard]] constexpr bool operator==(const Alignment& _other) const;
-
+	/// <summary>
+	/// <paragraph>Provides predefined alignment constants for common alignments.</paragraph>
+	/// </summary>
+	struct SFUIL_API PredefinedAlignments
+	{
 		static const Alignment UpperLeft;
 		static const Alignment MiddleLeft;
 		static const Alignment LowerLeft;
@@ -73,10 +49,6 @@ namespace sfui
 		static const Alignment UpperRight;
 		static const Alignment MiddleRight;
 		static const Alignment LowerRight;
-
-	private:
-		HorizontalAlignment alignX = Left;
-		VerticalAlignment alignY = Upper;
 	};
 
 	/// <summary>
@@ -89,12 +61,12 @@ namespace sfui
 		/// <paragraph>Calculates the anchored position of an element within a</paragraph>
 		/// <paragraph>parent container based on the specified alignment and offset.</paragraph>
 		/// </summary>
-		/// <param name="_parentSize"></param>
-		/// <param name="_elementSize"></param>
-		/// <param name="_alignment"></param>
-		/// <param name="_offset"></param>
+		/// <param name="_parentSize">The size of the parent container.</param>
+		/// <param name="_elementSize">The size of the element to be positioned.</param>
+		/// <param name="_alignment">The alignment of the element within the parent container.</param>
+		/// <param name="_offset">The offset to be applied to the calculated position.</param>
 		/// <returns></returns>
-		[[nodiscard]] static const sf::Vector2u getAnchoredPosition(
+		[[nodiscard]] static const sf::Vector2f& getAnchoredPosition(
 			const sf::Vector2u& _parentSize,
 			const sf::Vector2u& _elementSize,
 			const Alignment& _alignment,

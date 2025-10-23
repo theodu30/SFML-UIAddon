@@ -23,7 +23,7 @@ namespace sfui
 			return;
 		}
 
-		m_renderTexture.clear(sf::Color::Transparent);
+		m_renderTexture.clear(m_panelBackgroundColor);
 
 		// Default Hollow Rectangle Shape for Panel Background with Outline
 		sf::RectangleShape rectangleShape;
@@ -49,7 +49,7 @@ namespace sfui
 
 		// Set Position of Sprite based on Alignment and Offset
 		sf::Vector2u targetSize = _target.getSize();
-		sf::Vector2u position = Anchor::getAnchoredPosition(targetSize, m_size, m_alignment, m_offset);
+		sf::Vector2f position = Anchor::getAnchoredPosition(targetSize, m_size, m_alignment, m_offset);
 		sprite.setPosition(sf::Vector2f(position));
 
 		// Draw RenderTexture to _target
@@ -61,7 +61,7 @@ namespace sfui
 		m_active = _active;
 	}
 
-	bool UIPanel::isActive() const noexcept
+	const bool& UIPanel::isActive() const noexcept
 	{
 		return m_active;
 	}
@@ -77,17 +77,17 @@ namespace sfui
 		setSize(sf::Vector2u(_width, _height));
 	}
 
-	sf::Vector2u UIPanel::getSize() const noexcept
+	const sf::Vector2u& UIPanel::getSize() const noexcept
 	{
 		return m_size;
 	}
 
-	unsigned int UIPanel::getWidth() const noexcept
+	const unsigned int& UIPanel::getWidth() const noexcept
 	{
 		return m_size.x;
 	}
 
-	unsigned int UIPanel::getHeight() const noexcept
+	const unsigned int& UIPanel::getHeight() const noexcept
 	{
 		return m_size.y;
 	}
@@ -102,7 +102,7 @@ namespace sfui
 		setAlignment(Alignment(_alignX, _alignY));
 	}
 
-	Alignment UIPanel::getAlignment() const noexcept
+	const Alignment& UIPanel::getAlignment() const noexcept
 	{
 		return m_alignment;
 	}
@@ -117,8 +117,18 @@ namespace sfui
 		setOffset(sf::Vector2i(_offsetX, _offsetY));
 	}
 
-	sf::Vector2i UIPanel::getOffset() const noexcept
+	const sf::Vector2i& UIPanel::getOffset() const noexcept
 	{
 		return m_offset;
+	}
+
+	void UIPanel::setPanelBackgroundColor(const sf::Color& _color)
+	{
+		m_panelBackgroundColor = _color;
+	}
+
+	const sf::Color& UIPanel::getPanelBackgroundColor() const noexcept
+	{
+		return m_panelBackgroundColor;
 	}
 }

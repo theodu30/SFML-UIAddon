@@ -13,7 +13,7 @@ int main()
 
 	sfui::UIPanel panel;
 	panel.setActive(true);
-	panel.setAlignment(sfui::Alignment::MiddleCenter);
+	panel.setAlignment(sfui::PredefinedAlignments::MiddleCenter);
 	panel.setSize(window.getSize());
 
 	while (window.isOpen())

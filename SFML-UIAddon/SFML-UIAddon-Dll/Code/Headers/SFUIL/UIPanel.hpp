@@ -50,7 +50,7 @@ namespace sfui
 		/// <paragraph>Returns whether the UIPanel is active or not.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		bool isActive() const noexcept;
+		const bool& isActive() const noexcept;
 
 		/// <summary>
 		/// <paragraph>Sets the size of the UIPanel.</paragraph>
@@ -69,19 +69,19 @@ namespace sfui
 		/// <paragraph>Returns the size of the UIPanel.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		[[nodiscard]] sf::Vector2u getSize() const noexcept;
+		[[nodiscard]] const sf::Vector2u& getSize() const noexcept;
 
 		/// <summary>
 		/// <paragraph>Returns the width of the UIPanel.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		unsigned int getWidth() const noexcept;
+		const unsigned int& getWidth() const noexcept;
 
 		/// <summary>
 		/// <paragraph>Returns the height of the UIPanel.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		unsigned int getHeight() const noexcept;
+		const unsigned int& getHeight() const noexcept;
 
 		/// <summary>
 		/// <paragraph>Sets the alignment of the UIPanel.</paragraph>
@@ -100,7 +100,7 @@ namespace sfui
 		/// <paragraph>Returns the alignment of the UIPanel.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		[[nodiscard]] Alignment getAlignment() const noexcept;
+		[[nodiscard]] const Alignment& getAlignment() const noexcept;
 
 		/// <summary>
 		/// <paragraph>Sets the offset of the UIPanel.</paragraph>
@@ -119,14 +119,25 @@ namespace sfui
 		/// <paragraph>Returns the offset of the UIPanel.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		[[nodiscard]] sf::Vector2i getOffset() const noexcept;
+		[[nodiscard]] const sf::Vector2i& getOffset() const noexcept;
+
+		/// <summary>
+		/// <paragraph>Sets the background color of the UIPanel.</paragraph>
+		/// </summary>
+		/// <param name="_color">The new background color of the UIPanel.</param>
+		void setPanelBackgroundColor(const sf::Color& _color);
+
+		/// <summary>
+		/// <paragraph>Returns the background color of the UIPanel.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		[[nodiscard]] const sf::Color& getPanelBackgroundColor() const noexcept;
 	private:
 		bool m_active = false;
 		sf::Vector2u m_size;
-
 		Alignment m_alignment;
 		sf::Vector2i m_offset = sf::Vector2i(0, 0);
-
+		sf::Color m_panelBackgroundColor = sf::Color::Transparent;
 		sf::RenderTexture m_renderTexture;
 	};
 }
