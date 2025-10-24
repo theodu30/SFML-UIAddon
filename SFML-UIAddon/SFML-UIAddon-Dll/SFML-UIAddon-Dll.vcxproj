@@ -28,6 +28,7 @@
   <ItemGroup>
     <ClCompile Include="Code\Anchor.cpp" />
     <ClCompile Include="Code\UIPanel.cpp" />
+    <ClCompile Include="Code\UIElement.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
