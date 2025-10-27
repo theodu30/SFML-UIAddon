@@ -27,6 +27,8 @@ namespace sfui
 		const Alignment& _alignment,
 		const sf::Vector2i& _offset)
 	{
+		static sf::Vector2f result;
+
 		// Initial Position
 		int posX = 0;
 		int posY = 0;
@@ -62,6 +64,8 @@ namespace sfui
 		// Apply Offset
 		posX += _offset.x;
 		posY += _offset.y;
-		return sf::Vector2f(static_cast<float>(posX), static_cast<float>(posY));
+		result.x = static_cast<float>(posX);
+		result.y = static_cast<float>(posY);
+		return result;
 	}
 }

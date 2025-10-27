@@ -13,7 +13,7 @@ namespace sfui
 
 	// Template concept to ensure T is derived from UIElement
 	template<typename T>
-	concept UIElementSubClass = std::derived_from<UIElement, T>;
+	concept UIElementSubClass = std::derived_from<T, UIElement>;
 
 	/// <summary>
 	/// <paragraph>Base class for all UI Elements in the SFML-UIAddon library.</paragraph>
@@ -231,6 +231,20 @@ namespace sfui
 		bool removeFromHierarchy();
 
 		/// <summary>
+		/// <paragraph>Gets a reference to the vector of child UI Elements.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		std::vector<UIElement*>& getChildren()
+		{
+			return m_children;
+		}
+
+		const sf::Vector2u& getTextureSize() const
+		{
+			return m_renderTexture.getSize();
+		}
+
+		/// <summary>
 		/// <paragraph>Cast the UI Element to a specific derived type from UIElement.</paragraph>
 		/// </summary>
 		/// <typeparam name="T">The target derived type to cast to.</typeparam>
@@ -370,7 +384,22 @@ namespace sfui
 		VisibilityProperty m_visibility;
 		DisplayProperty m_display;
 
+		/// <summary>
+		/// <paragraph>Marks the UI Element as dirty, indicating it needs to be re-rendered.</paragraph>
+		/// <paragraph>Also propagates the dirty flag to the parent element if it exists.</paragraph>
+		/// </summary>
 		void markDirty();
+
+		/// <summary>
+		/// <paragraph>Re-renders the UI Element texture if it is marked as dirty.</paragraph>
+		/// </summary>
+		/// <param name="_texture">The RenderTexture assigned for layout calculations.</param>
 		virtual void reRenderIfDirty(sf::RenderTexture& _texture) = 0;
+
+		/// <summary>
+		/// <paragraph>Calculates the relative texture size based on the parent texture and size properties.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const sf::Vector2u& calculateRelativeTextureSize() const;
 	};
 }

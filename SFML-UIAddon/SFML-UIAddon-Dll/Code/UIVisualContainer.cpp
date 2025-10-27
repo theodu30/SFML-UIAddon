@@ -179,6 +179,10 @@ namespace sfui
 			// Set new size
 			newSize = sf::Vector2u(width, height);
 		}
+		else if (m_position.mode == PositionModeProperty::Relative)
+		{
+			
+		}
 
 		(void)m_renderTexture.resize(newSize);
 	}
