@@ -54,10 +54,24 @@ namespace sfui
 
 	struct SFUIL_API PositionProperty
 	{
+		PositionModeProperty mode = PositionModeProperty::Relative; // The position mode
 		PositionValueProperty top;
 		PositionValueProperty right;
 		PositionValueProperty bottom;
 		PositionValueProperty left;
+	};
+
+	enum class SFUIL_API FlexBasicValueTypeProperty
+	{
+		Auto,
+		Pixels,
+		Percentage
+	};
+
+	struct SFUIL_API FlexBasicValueProperty
+	{
+		short value = 0; // The value for the flex basis
+		FlexBasicValueTypeProperty type = FlexBasicValueTypeProperty::Auto; // The type of the value
 	};
 
 	struct SFUIL_API FlexShrinkProperty
@@ -87,6 +101,7 @@ namespace sfui
 
 	struct SFUIL_API FlexProperty
 	{
+		FlexBasicValueProperty flexBasis;
 		FlexShrinkProperty flexShrink;
 		FlexGrowProperty flexGrow;
 		FlexDirectionProperty flexDirection = FlexDirectionProperty::Column;
@@ -248,6 +263,11 @@ namespace sfui
 	{
 		MarginProperty margin;
 		PaddingProperty padding;
+	};
+
+	struct SFUIL_API BackgroundProperty
+	{
+		sf::Color color = sf::Color::Transparent; // The background color
 	};
 
 	struct SFUIL_API BorderColorValueProperty

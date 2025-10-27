@@ -8,6 +8,9 @@
 
 namespace sfui
 {
+	// Forward declaration of UIElement
+	class UIElement;
+
 	// Template concept to ensure T is derived from UIElement
 	template<typename T>
 	concept UIElementSubClass = std::derived_from<UIElement, T>;
@@ -37,68 +40,157 @@ namespace sfui
 		/// <summary>
 		/// <paragraph>Getter for Spacing Property.</paragraph>
 		/// <paragraph>Allows access to margin and padding properties.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		SpacingProperty& getSpacingProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Spacing Property.</paragraph>
+		/// <paragraph>Allows access to margin and padding properties.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const SpacingProperty& getSpacingProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Border Property.</paragraph>
 		/// <paragraph>Allows access to border color, width, and radius properties.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		BorderProperty& getBorderProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Border Property.</paragraph>
+		/// <paragraph>Allows access to border color, width, and radius properties.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const BorderProperty& getBorderProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Transform Property.</paragraph>
 		/// <paragraph>Allows access to transform origin, translate, scale, and rotate properties.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		TransformProperty& getTransformProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Transform Property.</paragraph>
+		/// <paragraph>Allows access to transform origin, translate, scale, and rotate properties.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const TransformProperty& getTransformProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Size Property.</paragraph>
 		/// <paragraph>Allows access to width and height properties, including min and max constraints.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		SizeProperty& getSizeProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Size Property.</paragraph>
+		/// <paragraph>Allows access to width and height properties, including min and max constraints.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const SizeProperty& getSizeProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Position Property.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		PositionProperty& getPositionProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Position Property.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const PositionProperty& getPositionProperty() const;
+
+		/// <summary>
+		/// <paragraph>Getter for Background Property.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		BackgroundProperty& getBackgroundProperty();
+
+		/// <summary>
+		/// <paragraph>Const version: Getter for Background Property.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const BackgroundProperty& getBackgroundProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Flex Property.</paragraph>
 		/// <paragraph>Allows access to shrink, grow, direction, and wrap properties.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		FlexProperty& getFlexProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Flex Property.</paragraph>
+		/// <paragraph>Allows access to shrink, grow, direction, and wrap properties.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const FlexProperty& getFlexProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Align Property.</paragraph>
 		/// <paragraph>Allows access to align items, justify content, align self and align contents properties.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		AlignProperty& getAlignProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Align Property.</paragraph>
+		/// <paragraph>Allows access to align items, justify content, align self and align contents properties.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const AlignProperty& getAlignProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Opacity Property.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		OpacityProperty& getOpacityProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Opacity Property.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const OpacityProperty& getOpacityProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Visibility Property.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		VisibilityProperty& getVisibilityProperty();
 
 		/// <summary>
+		/// <paragraph>Const version: Getter for Visibility Property.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const VisibilityProperty& getVisibilityProperty() const;
+
+		/// <summary>
 		/// <paragraph>Getter for Display Property.</paragraph>
+		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
 		/// </summary>
 		/// <returns></returns>
 		DisplayProperty& getDisplayProperty();
+
+		/// <summary>
+		/// <paragraph>Const version: Getter for Display Property.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		const DisplayProperty& getDisplayProperty() const;
 
 		/// <summary>
 		/// <paragraph>Sets the name of the UI Element.</paragraph>
@@ -111,6 +203,12 @@ namespace sfui
 		/// </summary>
 		/// <returns></returns>
 		const char* getName() const;
+
+		/// <summary>
+		/// <paragraph>Returns the number of child UI Elements.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		[[nodiscard]] size_t getChildCount() const noexcept;
 
 		/// <summary>
 		/// <paragraph>Adds a child UI Element to this element.</paragraph>
@@ -257,15 +355,22 @@ namespace sfui
 		std::vector<UIElement*> m_children; // Child UI Elements
 		UIElement* m_parent = nullptr; // Parent UI Element
 
+		sf::RenderTexture m_renderTexture; // Render texture for element rendering
+		bool m_dirty = true; // Flag indicating if the element needs to be re-rendered
+
 		SpacingProperty m_spacing;
 		BorderProperty m_border;
 		TransformProperty m_transform;
 		SizeProperty m_size;
 		PositionProperty m_position;
+		BackgroundProperty m_background;
 		FlexProperty m_flex;
 		AlignProperty m_align;
 		OpacityProperty m_opacity;
 		VisibilityProperty m_visibility;
 		DisplayProperty m_display;
+
+		void markDirty();
+		virtual void reRenderIfDirty(sf::RenderTexture& _texture) = 0;
 	};
 }
