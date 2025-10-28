@@ -49,141 +49,142 @@ namespace sfui
 
 		sf::Vector2u newSize;
 
+		calculateNewSize(newSize, _texture.getSize());
+
+		(void)m_renderTexture.resize(newSize);
+	}
+
+	void UIVisualContainer::calculateNewSize(sf::Vector2u& newSize, const sf::Vector2u& _parentSize)
+	{
+		// Calculate final minimum and maximum sizes based on SizeProperty constraints
+		sf::Vector2u minSize;
+		sf::Vector2u maxSize;
+		calculateFinalMinMaxSizes(minSize, maxSize, _parentSize);
+
+		// Calculate new size based on position mode
 		if (m_position.mode == PositionModeProperty::Absolute)
 		{
-			unsigned int width = 0;
-			unsigned int height = 0;
-
-			// Calculate width based on SizeValueTypeProperty
-			switch (m_size.size.width.type)
-			{
-			case SizeValueTypeProperty::Pixels:
-				// Direct pixel value
-				width = static_cast<unsigned int>(m_size.size.width.value);
-				break;
-			case SizeValueTypeProperty::Percentage:
-				// Percentage of parent size
-				width = static_cast<unsigned int>(_texture.getSize().x * m_size.size.width.value / 100);
-				break;
-			case SizeValueTypeProperty::Auto:
-				// Auto size handling
-				width = _texture.getSize().x;
-				break;
-			default:
-				width = _texture.getSize().x;
-				break;
-			}
-
-			// Clamp width to min and max constraints
-			unsigned int minWidth = 0;
-			switch (m_size.minSize.width.type)
-			{
-			case MinSizeValueTypeProperty::Pixels:
-				minWidth = static_cast<unsigned int>(m_size.minSize.width.value);
-				if (width < minWidth)
-					width = static_cast<unsigned int>(m_size.minSize.width.value);
-				break;
-			case MinSizeValueTypeProperty::Percentage:
-				minWidth = static_cast<unsigned int>(_texture.getSize().x * m_size.minSize.width.value / 100);
-				if (width < minWidth)
-					width = minWidth;
-				break;
-			case MinSizeValueTypeProperty::Auto:
-				// No minimum constraint
-				break;
-			default:
-				break;
-			}
-
-			unsigned int maxWidth = _texture.getSize().x;
-			switch (m_size.maxSize.width.type)
-			{
-			case MaxSizeValueTypeProperty::Pixels:
-				maxWidth = static_cast<unsigned int>(m_size.maxSize.width.value);
-				if (width > maxWidth)
-					width = maxWidth;
-				break;
-			case MaxSizeValueTypeProperty::Percentage:
-				maxWidth = static_cast<unsigned int>(_texture.getSize().x * m_size.maxSize.width.value / 100);
-				if (width > maxWidth)
-					width = maxWidth;
-				break;
-			case MaxSizeValueTypeProperty::None:
-				// No maximum constraint
-				break;
-			default:
-				break;
-			}
-
-			// Calculate height based on SizeValueTypeProperty
-			switch (m_size.size.height.type)
-			{
-			case SizeValueTypeProperty::Pixels:
-				// Direct pixel value
-				height = static_cast<unsigned int>(m_size.size.height.value);
-				break;
-			case SizeValueTypeProperty::Percentage:
-				// Percentage of parent size
-				height = static_cast<unsigned int>(_texture.getSize().y * m_size.size.height.value / 100);
-				break;
-			case SizeValueTypeProperty::Auto:
-				// Auto size handling
-				height = _texture.getSize().y;
-				break;
-			default:
-				height = _texture.getSize().y;
-				break;
-			}
-
-			// Clamp height to min and max constraints
-			unsigned int minHeight = 0;
-			switch (m_size.minSize.height.type)
-			{
-			case MinSizeValueTypeProperty::Pixels:
-				minHeight = static_cast<unsigned int>(m_size.minSize.height.value);
-				if (height < minHeight)
-					height = minHeight;
-				break;
-			case MinSizeValueTypeProperty::Percentage:
-				minHeight = static_cast<unsigned int>(_texture.getSize().y * m_size.minSize.height.value / 100);
-				if (height < minHeight)
-					height = minHeight;
-				break;
-			case MinSizeValueTypeProperty::Auto:
-				// No minimum constraint
-				break;
-			default:
-				break;
-			}
-
-			unsigned int maxHeight = _texture.getSize().y;
-			switch (m_size.maxSize.height.type)
-			{
-			case MaxSizeValueTypeProperty::Pixels:
-				maxHeight = static_cast<unsigned int>(m_size.maxSize.height.value);
-				if (height > maxHeight)
-					height = maxHeight;
-				break;
-			case MaxSizeValueTypeProperty::Percentage:
-				maxHeight = static_cast<unsigned int>(_texture.getSize().y * m_size.maxSize.height.value / 100);
-				if (height > maxHeight)
-					height = maxHeight;
-				break;
-			case MaxSizeValueTypeProperty::None:
-				// No maximum constraint
-				break;
-			default:
-				break;
-			}
-
-			// Set new size
-			newSize = sf::Vector2u(width, height);
+			calculateNewSizeInAbsolute(newSize, _parentSize);
 		}
 		else if (m_position.mode == PositionModeProperty::Relative)
 		{
-			
+			calculateNewSizeInRelative(newSize, _parentSize);
 		}
 
-		(void)m_renderTexture.resize(newSize);
+		// Clamp new size within min and max sizes
+		newSize.x = std::max(minSize.x, std::min(newSize.x, maxSize.x));
+		newSize.y = std::max(minSize.y, std::min(newSize.y, maxSize.y));
+	}
+
+	void UIVisualContainer::calculateNewSizeInAbsolute(sf::Vector2u& newSize, const sf::Vector2u& _parentSize)
+	{
+		// Compute new size
+		const SizeVectorProperty& sizeProp = m_size.size;
+
+		// Width
+		switch (sizeProp.width.type)
+		{
+		case SizeValueTypeProperty::Pixels:
+			newSize.x = static_cast<unsigned int>(sizeProp.width.value);
+			break;
+		case SizeValueTypeProperty::Percentage:
+			newSize.x = static_cast<unsigned int>(_parentSize.x * (sizeProp.width.value / 100.f));
+			break;
+		case SizeValueTypeProperty::Auto:
+			// Here we calculate auto size based on content or default to zero
+			
+		}
+	}
+
+	void UIVisualContainer::calculateNewSizeInRelative(sf::Vector2u& newSize, const sf::Vector2u& _parentSize)
+	{
+	}
+
+	void UIVisualContainer::calculateFinalMinMaxSizes(sf::Vector2u& minSize, sf::Vector2u& maxSize, const sf::Vector2u& _parentSize) const
+	{
+		// Compute minimum size
+		const MinSizeVectorProperty& minProp = m_size.minSize;
+
+		// Width
+		switch (minProp.width.type)
+		{
+		case MinSizeValueTypeProperty::Pixels:
+			minSize.x = static_cast<unsigned int>(minProp.width.value);
+			break;
+		case MinSizeValueTypeProperty::Percentage:
+			minSize.x = static_cast<unsigned int>(_parentSize.x * (minProp.width.value / 100.f));
+			break;
+		case MinSizeValueTypeProperty::Auto:
+			minSize.x = 0u;
+			break;
+		default:
+			minSize.x = 0u;
+			break;
+		}
+
+		// Height
+		switch (minProp.height.type)
+		{
+		case MinSizeValueTypeProperty::Pixels:
+			minSize.y = static_cast<unsigned int>(minProp.height.value);
+			break;
+		case MinSizeValueTypeProperty::Percentage:
+			minSize.y = static_cast<unsigned int>(_parentSize.y * (minProp.height.value / 100.f));
+			break;
+		case MinSizeValueTypeProperty::Auto:
+			minSize.y = 0u;
+			break;
+		default:
+			minSize.y = 0u;
+			break;
+		}
+
+		// Compute maximum size
+		const MaxSizeVectorProperty& maxProp = m_size.maxSize;
+
+		// Width
+		switch (maxProp.width.type)
+		{
+		case MaxSizeValueTypeProperty::Pixels:
+			maxSize.x = static_cast<unsigned int>(maxProp.width.value);
+			break;
+		case MaxSizeValueTypeProperty::Percentage:
+			maxSize.x = static_cast<unsigned int>(_parentSize.x * (maxProp.width.value / 100.f));
+			break;
+		case MaxSizeValueTypeProperty::None:
+			maxSize.x = _parentSize.x;
+			break;
+		default:
+			maxSize.x = _parentSize.x;
+			break;
+		}
+
+		// Height
+		switch (maxProp.height.type)
+		{
+		case MaxSizeValueTypeProperty::Pixels:
+			maxSize.y = static_cast<unsigned int>(maxProp.height.value);
+			break;
+		case MaxSizeValueTypeProperty::Percentage:
+			maxSize.y = static_cast<unsigned int>(_parentSize.y * (maxProp.height.value / 100.f));
+			break;
+		case MaxSizeValueTypeProperty::None:
+			maxSize.y = _parentSize.y;
+			break;
+		default:
+			maxSize.y = _parentSize.y;
+			break;
+		}
+	}
+
+	void UIVisualContainer::calculateContentSize(sf::Vector2u& contentSize) const
+	{
+		// Here we calculate the preffered size based on the hierarchy this element
+		if (m_children.empty())
+		{
+			contentSize = getTextureSize();
+			return;
+		}
+
 	}
 }

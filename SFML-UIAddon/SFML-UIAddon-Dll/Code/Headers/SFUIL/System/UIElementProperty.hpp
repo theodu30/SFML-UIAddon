@@ -8,7 +8,7 @@ namespace sfui
 {
 	struct SFUIL_API OpacityProperty
 	{
-		unsigned char value = 100; // Opacity value between 0 (transparent) and 100 (opaque)
+		float value = 1.f; // Opacity value between 0.0f (transparent) and 1.0f (opaque)
 	};
 
 	enum class SFUIL_API DisplayValueTypeProperty : char
@@ -48,7 +48,7 @@ namespace sfui
 
 	struct SFUIL_API PositionValueProperty
 	{
-		short value = 0; // The value for the position
+		float value = 0.f; // The value for the position
 		PositionValueTypeProperty type = PositionValueTypeProperty::Pixels; // The type of the value
 	};
 
@@ -70,18 +70,18 @@ namespace sfui
 
 	struct SFUIL_API FlexBasicValueProperty
 	{
-		short value = 0; // The value for the flex basis
+		float value = 0.f; // The value for the flex basis
 		FlexBasicValueTypeProperty type = FlexBasicValueTypeProperty::Auto; // The type of the value
 	};
 
 	struct SFUIL_API FlexShrinkProperty
 	{
-		unsigned char value = 100; // The flex shrink factor
+		float value = 1.f; // The flex shrink factor
 	};
 
 	struct SFUIL_API FlexGrowProperty
 	{
-		unsigned char value = 100; // The flex grow factor
+		float value = 1.f; // The flex grow factor
 	};
 
 	enum class SFUIL_API FlexDirectionProperty : char
@@ -176,19 +176,19 @@ namespace sfui
 
 	struct SFUIL_API SizeValueProperty
 	{
-		short value = 0; // The value for the width
+		float value = 0.f; // The value for the width
 		SizeValueTypeProperty type = SizeValueTypeProperty::Auto; // The type of the value
 	};
 
 	struct SFUIL_API MinSizeValueProperty
 	{
-		short value = 0; // The value for the width
+		float value = 0.f; // The value for the width
 		MinSizeValueTypeProperty type = MinSizeValueTypeProperty::Auto; // The type of the value
 	};
 
 	struct SFUIL_API MaxSizeValueProperty
 	{
-		short value = 0; // The value for the width
+		float value = 0.f; // The value for the width
 		MaxSizeValueTypeProperty type = MaxSizeValueTypeProperty::None; // The type of the value
 	};
 
@@ -226,7 +226,7 @@ namespace sfui
 
 	struct SFUIL_API MarginValueProperty
 	{
-		short value = 0; // The value for the margin
+		float value = 0.f; // The value for the margin
 		MarginValueTypeProperty type = MarginValueTypeProperty::Pixels; // The type of the value
 	};
 
@@ -247,7 +247,7 @@ namespace sfui
 
 	struct SFUIL_API PaddingValueProperty
 	{
-		short value = 0; // The value for the padding
+		float value = 0.f; // The value for the padding
 		PaddingValueTypeProperty type = PaddingValueTypeProperty::Pixels; // The type of the value
 	};
 
@@ -290,7 +290,7 @@ namespace sfui
 
 	struct SFUIL_API BorderWidthValueProperty
 	{
-		unsigned char value = 0; // The value for the border width
+		float value = 0.f; // The value for the border width
 		BorderWidthValueTypeProperty type = BorderWidthValueTypeProperty::Pixels; // The type of the value
 	};
 
@@ -310,7 +310,7 @@ namespace sfui
 
 	struct SFUIL_API BorderRadiusValueProperty
 	{
-		char value = 0; // The value for the border radius
+		float value = 0.f; // The value for the border radius
 		BorderRadiusValueTypeProperty type = BorderRadiusValueTypeProperty::Pixels; // The type of the value
 	};
 
@@ -337,7 +337,7 @@ namespace sfui
 
 	struct SFUIL_API TransformOriginValueProperty
 	{
-		short value = 0; // The value for the transform origin
+		float value = 0.f; // The value for the transform origin
 		TransformOriginValueTypeProperty type = TransformOriginValueTypeProperty::Pixels; // The type of the value
 	};
 
@@ -355,7 +355,7 @@ namespace sfui
 
 	struct SFUIL_API TransformTranslateValueProperty
 	{
-		short value = 0; // The value for the transform translate
+		float value = 0.f; // The value for the transform translate
 		TransformTranslateValueTypeProperty type = TransformTranslateValueTypeProperty::Pixels; // The type of the value
 	};
 
@@ -367,7 +367,7 @@ namespace sfui
 
 	struct SFUIL_API TransformScaleValueProperty
 	{
-		short value = 100; // The value for the transform scale
+		float value = 1.f; // The value for the transform scale
 	};
 
 	struct SFUIL_API TransformScaleProperty
@@ -384,7 +384,7 @@ namespace sfui
 
 	struct SFUIL_API TransformRotateValueProperty
 	{
-		short value = 0; // The value for the transform rotate
+		float value = 0.f; // The value for the transform rotate
 		TransformRotateValueTypeProperty type = TransformRotateValueTypeProperty::Degrees; // The type of the value
 	};
 

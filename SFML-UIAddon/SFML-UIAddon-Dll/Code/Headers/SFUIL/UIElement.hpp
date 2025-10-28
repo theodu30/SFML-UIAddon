@@ -50,7 +50,7 @@ namespace sfui
 		/// <paragraph>Allows access to margin and padding properties.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const SpacingProperty& getSpacingProperty() const;
+		const SpacingProperty& getConstSpacingProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Border Property.</paragraph>
@@ -65,7 +65,7 @@ namespace sfui
 		/// <paragraph>Allows access to border color, width, and radius properties.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const BorderProperty& getBorderProperty() const;
+		const BorderProperty& getConstBorderProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Transform Property.</paragraph>
@@ -80,7 +80,7 @@ namespace sfui
 		/// <paragraph>Allows access to transform origin, translate, scale, and rotate properties.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const TransformProperty& getTransformProperty() const;
+		const TransformProperty& getConstTransformProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Size Property.</paragraph>
@@ -95,7 +95,7 @@ namespace sfui
 		/// <paragraph>Allows access to width and height properties, including min and max constraints.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const SizeProperty& getSizeProperty() const;
+		const SizeProperty& getConstSizeProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Position Property.</paragraph>
@@ -108,7 +108,7 @@ namespace sfui
 		/// <paragraph>Const version: Getter for Position Property.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const PositionProperty& getPositionProperty() const;
+		const PositionProperty& getConstPositionProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Background Property.</paragraph>
@@ -121,7 +121,7 @@ namespace sfui
 		/// <paragraph>Const version: Getter for Background Property.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const BackgroundProperty& getBackgroundProperty() const;
+		const BackgroundProperty& getConstBackgroundProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Flex Property.</paragraph>
@@ -136,7 +136,7 @@ namespace sfui
 		/// <paragraph>Allows access to shrink, grow, direction, and wrap properties.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const FlexProperty& getFlexProperty() const;
+		const FlexProperty& getConstFlexProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Align Property.</paragraph>
@@ -151,7 +151,7 @@ namespace sfui
 		/// <paragraph>Allows access to align items, justify content, align self and align contents properties.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const AlignProperty& getAlignProperty() const;
+		const AlignProperty& getConstAlignProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Opacity Property.</paragraph>
@@ -164,7 +164,7 @@ namespace sfui
 		/// <paragraph>Const version: Getter for Opacity Property.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const OpacityProperty& getOpacityProperty() const;
+		const OpacityProperty& getConstOpacityProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Visibility Property.</paragraph>
@@ -177,7 +177,7 @@ namespace sfui
 		/// <paragraph>Const version: Getter for Visibility Property.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const VisibilityProperty& getVisibilityProperty() const;
+		const VisibilityProperty& getConstVisibilityProperty() const;
 
 		/// <summary>
 		/// <paragraph>Getter for Display Property.</paragraph>
@@ -190,7 +190,7 @@ namespace sfui
 		/// <paragraph>Const version: Getter for Display Property.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		const DisplayProperty& getDisplayProperty() const;
+		const DisplayProperty& getConstDisplayProperty() const;
 
 		/// <summary>
 		/// <paragraph>Sets the name of the UI Element.</paragraph>

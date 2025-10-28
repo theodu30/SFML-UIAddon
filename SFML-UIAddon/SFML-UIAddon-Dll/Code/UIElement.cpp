@@ -8,7 +8,7 @@ namespace sfui
 		return m_spacing;
 	}
 
-	const SpacingProperty& UIElement::getSpacingProperty() const
+	const SpacingProperty& UIElement::getConstSpacingProperty() const
 	{
 		return m_spacing;
 	}
@@ -19,7 +19,7 @@ namespace sfui
 		return m_border;
 	}
 
-	const BorderProperty& UIElement::getBorderProperty() const
+	const BorderProperty& UIElement::getConstBorderProperty() const
 	{
 		return m_border;
 	}
@@ -30,7 +30,7 @@ namespace sfui
 		return m_transform;
 	}
 
-	const TransformProperty& UIElement::getTransformProperty() const
+	const TransformProperty& UIElement::getConstTransformProperty() const
 	{
 		return m_transform;
 	}
@@ -41,7 +41,7 @@ namespace sfui
 		return m_size;
 	}
 
-	const SizeProperty& UIElement::getSizeProperty() const
+	const SizeProperty& UIElement::getConstSizeProperty() const
 	{
 		return m_size;
 	}
@@ -52,7 +52,7 @@ namespace sfui
 		return m_position;
 	}
 
-	const PositionProperty& UIElement::getPositionProperty() const
+	const PositionProperty& UIElement::getConstPositionProperty() const
 	{
 		return m_position;
 	}
@@ -63,7 +63,7 @@ namespace sfui
 		return m_background;
 	}
 
-	const BackgroundProperty& UIElement::getBackgroundProperty() const
+	const BackgroundProperty& UIElement::getConstBackgroundProperty() const
 	{
 		return m_background;
 	}
@@ -74,7 +74,7 @@ namespace sfui
 		return m_flex;
 	}
 
-	const FlexProperty& UIElement::getFlexProperty() const
+	const FlexProperty& UIElement::getConstFlexProperty() const
 	{
 		return m_flex;
 	}
@@ -85,7 +85,7 @@ namespace sfui
 		return m_align;
 	}
 
-	const AlignProperty& UIElement::getAlignProperty() const
+	const AlignProperty& UIElement::getConstAlignProperty() const
 	{
 		return m_align;
 	}
@@ -96,7 +96,7 @@ namespace sfui
 		return m_opacity;
 	}
 
-	const OpacityProperty& UIElement::getOpacityProperty() const
+	const OpacityProperty& UIElement::getConstOpacityProperty() const
 	{
 		return m_opacity;
 	}
@@ -107,7 +107,7 @@ namespace sfui
 		return m_visibility;
 	}
 
-	const VisibilityProperty& UIElement::getVisibilityProperty() const
+	const VisibilityProperty& UIElement::getConstVisibilityProperty() const
 	{
 		return m_visibility;
 	}
@@ -118,7 +118,7 @@ namespace sfui
 		return m_display;
 	}
 
-	const DisplayProperty& UIElement::getDisplayProperty() const
+	const DisplayProperty& UIElement::getConstDisplayProperty() const
 	{
 		return m_display;
 	}
@@ -203,7 +203,7 @@ namespace sfui
 		else
 		{
 			// Get FlexProperty of parent for layout calculations
-			const FlexProperty& parentFlex = static_cast<const UIElement*>(m_parent)->getFlexProperty();
+			const FlexProperty& parentFlex = static_cast<const UIElement*>(m_parent)->getConstFlexProperty();
 
 			// Get number of siblings for size distribution
 			const size_t& siblingCount = m_parent->getChildCount();

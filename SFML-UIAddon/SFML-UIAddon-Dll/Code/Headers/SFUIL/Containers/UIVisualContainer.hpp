@@ -17,5 +17,11 @@ namespace sfui
 		void drawToTarget(sf::RenderTarget& _target) override;
 	protected:
 		void reRenderIfDirty(sf::RenderTexture& _texture) override;
+	private:
+		void calculateNewSize(sf::Vector2u& newSize, const sf::Vector2u& _parentSize);
+		void calculateNewSizeInAbsolute(sf::Vector2u& newSize, const sf::Vector2u& _parentSize);
+		void calculateNewSizeInRelative(sf::Vector2u& newSize, const sf::Vector2u& _parentSize);
+		void calculateFinalMinMaxSizes(sf::Vector2u& minSize, sf::Vector2u& maxSize, const sf::Vector2u& _parentSize) const;
+		void calculateContentSize(sf::Vector2u& contentSize) const;
 	};
 }
