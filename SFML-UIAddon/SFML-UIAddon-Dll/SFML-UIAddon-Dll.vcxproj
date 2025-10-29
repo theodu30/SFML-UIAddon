@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Anchor.cpp" />
+    <ClCompile Include="Code\UIElementProperty.cpp" />
     <ClCompile Include="Code\UIVisualContainer.cpp" />
     <ClCompile Include="Code\UIPanel.cpp" />
     <ClCompile Include="Code\UIElement.cpp" />

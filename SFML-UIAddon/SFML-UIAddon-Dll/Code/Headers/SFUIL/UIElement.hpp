@@ -234,15 +234,13 @@ namespace sfui
 		/// <paragraph>Gets a reference to the vector of child UI Elements.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		std::vector<UIElement*>& getChildren()
-		{
-			return m_children;
-		}
+		std::vector<UIElement*>& getChildren();
 
-		const sf::Vector2u& getTextureSize() const
-		{
-			return m_renderTexture.getSize();
-		}
+		/// <summary>
+		/// <paragraph>Gets the size of the internal RenderTexture.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		sf::Vector2u getTextureSize() const;
 
 		/// <summary>
 		/// <paragraph>Cast the UI Element to a specific derived type from UIElement.</paragraph>
@@ -395,11 +393,5 @@ namespace sfui
 		/// </summary>
 		/// <param name="_texture">The RenderTexture assigned for layout calculations.</param>
 		virtual void reRenderIfDirty(sf::RenderTexture& _texture) = 0;
-
-		/// <summary>
-		/// <paragraph>Calculates the relative texture size based on the parent texture and size properties.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const sf::Vector2u& calculateRelativeTextureSize() const;
 	};
 }

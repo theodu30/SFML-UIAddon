@@ -176,19 +176,19 @@ namespace sfui
 
 	struct SFUIL_API SizeValueProperty
 	{
-		float value = 0.f; // The value for the width
+		float value = 0.f; // The value for the width or height
 		SizeValueTypeProperty type = SizeValueTypeProperty::Auto; // The type of the value
 	};
 
 	struct SFUIL_API MinSizeValueProperty
 	{
-		float value = 0.f; // The value for the width
+		float value = 0.f; // The value for the width or height
 		MinSizeValueTypeProperty type = MinSizeValueTypeProperty::Auto; // The type of the value
 	};
 
 	struct SFUIL_API MaxSizeValueProperty
 	{
-		float value = 0.f; // The value for the width
+		float value = 0.f; // The value for the width or height
 		MaxSizeValueTypeProperty type = MaxSizeValueTypeProperty::None; // The type of the value
 	};
 
@@ -399,5 +399,146 @@ namespace sfui
 		TransformTranslateProperty translate;
 		TransformScaleProperty scale;
 		TransformRotateProperty rotate;
+	};
+
+	/// <summary>
+	/// <paragraph>Utility class that contains different utility functions for UI element properties.</paragraph>
+	/// </summary>
+	class SFUIL_API UIPropUtils
+	{
+	public:
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const PositionValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const SizeValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const MinSizeValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const MaxSizeValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const MarginValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const PaddingValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const BorderWidthValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const BorderRadiusValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const TransformOriginValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const TransformTranslateValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <param name="_relativeTo"></param>
+		/// <returns></returns>
+		static float resolveValueToPixels(const FlexBasicValueProperty& _prop, float _relativeTo);
+
+		/// <summary>
+		/// <paragraph>Resolves a rotation angle property to degrees based on its type.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <returns></returns>
+		static float resolveAngleToDegrees(const TransformRotateValueProperty& _prop);
+
+		/// <summary>
+		/// <paragraph>Checks if the flex direction is of row or reverse row type.</paragraph>
+		/// </summary>
+		/// <param name="_flex"></param>
+		/// <returns></returns>
+		static bool isFlexDirectionRowType(const FlexProperty& _flex);
+
+		/// <summary>
+		/// <paragraph>Checks if the flex direction is of column orr reverse column type.</paragraph>
+		/// </summary>
+		/// <param name="_flex"></param>
+		/// <returns></returns>
+		static bool isFlexDirectionColumnType(const FlexProperty& _flex);
+
+		/// <summary>
+		/// <paragraph>Checks if the flex direction is of reverse row or reverse column type.</paragraph>
+		/// </summary>
+		/// <param name="_flex"></param>
+		/// <returns></returns>
+		static bool isFlexDirectionReverseType(const FlexProperty& _flex);
+
+		/// <summary>
+		/// <paragraph>Clamps a float value between a minimum and maximum value.</paragraph>
+		/// </summary>
+		/// <param name="_value"></param>
+		/// <param name="_min"></param>
+		/// <param name="_max"></param>
+		/// <returns>Returns _min if _value less than _min, _max if _value more than _max, otherwise simply returns _value.</returns>
+		static float clampFloat(float _value, float _min, float _max);
+
+		/// <summary>
+		/// <paragraph>Clamps an unsigned int value between a minimum and maximum value.</paragraph>
+		/// </summary>
+		/// <param name="_value"></param>
+		/// <param name="_min"></param>
+		/// <param name="_max"></param>
+		/// <returns>>Returns _min if _value less than _min, _max if _value more than _max, otherwise simply returns _value.</returns>
+		static unsigned int clampUnsignedInt(unsigned int _value, unsigned int _min, unsigned int _max);
 	};
 }

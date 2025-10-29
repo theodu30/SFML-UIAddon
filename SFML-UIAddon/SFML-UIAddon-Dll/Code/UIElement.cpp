@@ -183,6 +183,16 @@ namespace sfui
 		return true;
 	}
 
+	std::vector<UIElement*>& UIElement::getChildren()
+	{
+		return m_children;
+	}
+
+	sf::Vector2u UIElement::getTextureSize() const
+	{
+		return m_renderTexture.getSize();
+	}
+
 	void UIElement::markDirty()
 	{
 		m_dirty = true;
@@ -190,40 +200,5 @@ namespace sfui
 		{
 			m_parent->markDirty();
 		}
-	}
-
-	const sf::Vector2u& UIElement::calculateRelativeTextureSize() const
-	{
-		static sf::Vector2u relativeSize;
-
-		if (!m_parent)
-		{
-			relativeSize = m_renderTexture.getSize();
-		}
-		else
-		{
-			// Get FlexProperty of parent for layout calculations
-			const FlexProperty& parentFlex = static_cast<const UIElement*>(m_parent)->getConstFlexProperty();
-
-			// Get number of siblings for size distribution
-			const size_t& siblingCount = m_parent->getChildCount();
-
-			// Basic calculation: divide parent's size by number of siblings depending on flex direction
-			switch (parentFlex.flexDirection)
-			{
-			case FlexDirectionProperty::Column:
-			case FlexDirectionProperty::ColumnReverse:
-				relativeSize.x = m_parent->m_renderTexture.getSize().x;
-				relativeSize.y = m_parent->m_renderTexture.getSize().y / static_cast<unsigned int>(siblingCount);
-				break;
-			case FlexDirectionProperty::Row:
-			case FlexDirectionProperty::RowReverse:
-				relativeSize.x = m_parent->m_renderTexture.getSize().x / static_cast<unsigned int>(siblingCount);
-				relativeSize.y = m_parent->m_renderTexture.getSize().y;
-				break;
-			}
-		}
-
-		return relativeSize;
 	}
 }
