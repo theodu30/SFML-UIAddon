@@ -8,6 +8,10 @@
 
 namespace sfui
 {
+	// Forward declaration
+
+	class UIVisualContainer;
+
 	/// <summary>
 	/// <paragraph>UIPanel is a container for UI Elements that renders them onto a RenderTexture.</paragraph>
 	/// <paragraph>It can be drawn onto any RenderTarget.</paragraph>
@@ -132,12 +136,22 @@ namespace sfui
 		/// </summary>
 		/// <returns></returns>
 		[[nodiscard]] const sf::Color& getPanelBackgroundColor() const noexcept;
+
+		/// <summary>
+		/// <paragraph>Gets the root UI Visual Container of the UIPanel.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		UIVisualContainer* getRootElement() const noexcept
+		{
+			return m_rootElement;
+		}
 	private:
 		bool m_active = false;
-		sf::Vector2u m_size;
 		Alignment m_alignment;
-		sf::Vector2i m_offset = sf::Vector2i(0, 0);
 		sf::Color m_panelBackgroundColor = sf::Color::Transparent;
+		sf::Vector2u m_size;
+		sf::Vector2i m_offset = sf::Vector2i(0, 0);
 		sf::RenderTexture m_renderTexture;
+		UIVisualContainer* m_rootElement = nullptr;
 	};
 }

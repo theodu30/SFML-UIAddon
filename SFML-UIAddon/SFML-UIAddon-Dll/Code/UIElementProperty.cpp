@@ -199,52 +199,61 @@ namespace sfui
 		return 0.0f;
 	}
 
-	bool UIPropUtils::isFlexDirectionRowType(const FlexProperty& _flex)
+	float UIPropUtils::resolveAngleToRadians(const TransformRotateValueProperty& _prop)
 	{
-		switch (_flex.flexDirection)
+		switch (_prop.type)
 		{
-		case FlexDirectionProperty::Row:
-		case FlexDirectionProperty::RowReverse:
-			return true;
-		case FlexDirectionProperty::Column:
-		case FlexDirectionProperty::ColumnReverse:
-			return false;
+		case TransformRotateValueTypeProperty::Degrees:
+			return (_prop.value * (3.14159265f / 180.f));
+		case TransformRotateValueTypeProperty::Radians:
+			return _prop.value;
+		default:
+			return 0.0f;
 		}
 
 		// Fail safe
-		return false;
+		return 0.0f;
+	}
+
+	sf::Angle UIPropUtils::resolveAngleToSfAngle(const TransformRotateValueProperty& _prop)
+	{
+		switch (_prop.type)
+		{
+		case TransformRotateValueTypeProperty::Degrees:
+			return sf::degrees(_prop.value);
+		case TransformRotateValueTypeProperty::Radians:
+			return sf::radians(_prop.value);
+		default:
+			return sf::degrees(0.f);
+		}
+
+		// Fail safe
+		return sf::degrees(0.f);
+	}
+
+	bool UIPropUtils::isFlexDirectionRowType(const FlexProperty& _flex)
+	{
+		return (_flex.flexDirection == FlexDirectionProperty::Row || _flex.flexDirection == FlexDirectionProperty::RowReverse);
 	}
 
 	bool UIPropUtils::isFlexDirectionColumnType(const FlexProperty& _flex)
 	{
-		switch (_flex.flexDirection)
-		{
-		case FlexDirectionProperty::Column:
-		case FlexDirectionProperty::ColumnReverse:
-			return true;
-		case FlexDirectionProperty::Row:
-		case FlexDirectionProperty::RowReverse:
-			return false;
-		}
-
-		// Fail safe
-		return false;
+		return (_flex.flexDirection == FlexDirectionProperty::Column || _flex.flexDirection == FlexDirectionProperty::ColumnReverse);
 	}
 
 	bool UIPropUtils::isFlexDirectionReverseType(const FlexProperty& _flex)
 	{
-		switch (_flex.flexDirection)
-		{
-		case FlexDirectionProperty::ColumnReverse:
-		case FlexDirectionProperty::RowReverse:
-			return true;
-		case FlexDirectionProperty::Column:
-		case FlexDirectionProperty::Row:
-			return false;
-		}
+		return (_flex.flexDirection == FlexDirectionProperty::RowReverse || _flex.flexDirection == FlexDirectionProperty::ColumnReverse);
+	}
 
-		// Fail safe
-		return false;
+	bool UIPropUtils::isPositionAbsolute(const PositionProperty& _position)
+	{
+		return _position.mode == PositionModeProperty::Absolute;
+	}
+
+	bool UIPropUtils::isPositionRelative(const PositionProperty& _position)
+	{
+		return _position.mode == PositionModeProperty::Relative;
 	}
 
 	float UIPropUtils::clampFloat(float _value, float _min, float _max)
@@ -263,5 +272,62 @@ namespace sfui
 		if (_value > _max)
 			return _max;
 		return _value;
+	}
+
+	float UIPropUtils::calculateJustifyContentOffset(const JustifyContentProperty& _justifyContent, size_t _siblingIndex, size_t _siblingCount, float _elementSize, float _parentSize)
+	{
+		switch (_justifyContent)
+		{
+		case JustifyContentProperty::FlexStart:
+			return static_cast<float>(_siblingIndex) * _elementSize;
+		case JustifyContentProperty::Center:
+			return ((_parentSize - (_elementSize * static_cast<float>(_siblingCount))) / 2.f) + (static_cast<float>(_siblingIndex) * _elementSize);
+		case JustifyContentProperty::FlexEnd:
+			return _parentSize - (_elementSize * static_cast<float>(_siblingCount - _siblingIndex));
+		case JustifyContentProperty::SpaceBetween:
+			if (_siblingCount > 1)
+			{
+				float space = (_parentSize - (_elementSize * static_cast<float>(_siblingCount))) / static_cast<float>(_siblingCount - 1);
+				return (static_cast<float>(_siblingIndex) * (_elementSize + space));
+			}
+			else
+			{
+				return 0.f;
+			}
+		case JustifyContentProperty::SpaceAround:
+			{
+				float space = (_parentSize - (_elementSize * static_cast<float>(_siblingCount))) / static_cast<float>(_siblingCount);
+				return (space / 2.f) + (static_cast<float>(_siblingIndex) * (_elementSize + space));
+			}
+		case JustifyContentProperty::SpaceEvenly:
+			{
+				float space = (_parentSize - (_elementSize * static_cast<float>(_siblingCount))) / static_cast<float>(_siblingCount + 1);
+				return space + (static_cast<float>(_siblingIndex) * (_elementSize + space));
+			}
+		default:
+			return 0.0f;
+		}
+
+		// Fail safe
+		return 0.0f;
+	}
+	float UIPropUtils::calculateAlignItemsOffset(const AlignItemsProperty& _alignItems, float _elementSize, float _parentSize)
+	{
+		switch (_alignItems)
+		{
+		case AlignItemsProperty::FlexStart:
+			return 0.f;
+		case AlignItemsProperty::Center:
+			return (_parentSize - _elementSize) / 2.f;
+		case AlignItemsProperty::FlexEnd:
+			return _parentSize - _elementSize;
+		case AlignItemsProperty::Stretch:
+			return 0.f; // Stretch is handled differently, so we return 0 offset here
+		default:
+			return 0.0f;
+		}
+
+		// Fail safe
+		return 0.0f;
 	}
 }

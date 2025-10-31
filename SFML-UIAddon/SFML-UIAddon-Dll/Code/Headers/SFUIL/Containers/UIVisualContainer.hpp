@@ -38,31 +38,33 @@ namespace sfui
 		void drawToTarget(sf::RenderTarget& _target) override;
 	protected:
 		/// <summary>
-		/// <paragraph>Re-renders the UIVisualContainer to the provided RenderTexture if it is marked as dirty.</paragraph>
+		/// <paragraph>Re-renders the UIVisualContainer texture if it is marked as dirty.</paragraph>
 		/// </summary>
 		/// <param name="_texture"></param>
 		void reRenderIfDirty(sf::RenderTexture& _texture) override;
+
+		void Initialize() override;
 	private:
 		/// <summary>
 		/// <paragraph>Calculates the new size of the UIVisualContainer based on its SizeProperty and the parent size.</paragraph>
 		/// </summary>
 		/// <param name="newSize"></param>
 		/// <param name="_parentSize"></param>
-		void calculateNewSize(sf::Vector2u& newSize, const sf::Vector2u& _parentSize);
+		void calculateNewSize(sf::Vector2u& newSize, const sf::Vector2u& _parentSize, const FlexProperty& _parentFlex);
 
 		/// <summary>
 		/// <paragraph>Calculates the new size in absolute mode.</paragraph>
 		/// </summary>
 		/// <param name="newSize"></param>
 		/// <param name="_parentSize"></param>
-		void calculateNewSizeInAbsolute(sf::Vector2u& newSize, const sf::Vector2u& _parentSize);
+		void calculateNewSizeInAbsolute(sf::Vector2u& newSize, const sf::Vector2u& _parentSize, const FlexProperty& _parentFlex);
 
 		/// <summary>
 		/// <paragraph>Calculates the new size in relative mode.</paragraph>
 		/// </summary>
 		/// <param name="newSize"></param>
 		/// <param name="_parentSize"></param>
-		void calculateNewSizeInRelative(sf::Vector2u& newSize, const sf::Vector2u& _parentSize);
+		void calculateNewSizeInRelative(sf::Vector2u& newSize, const sf::Vector2u& _parentSize, const FlexProperty& _parentFlex);
 
 		/// <summary>
 		/// <paragraph>Calculates the final minimum and maximum sizes based on SizeProperty constraints.</paragraph>
@@ -70,7 +72,7 @@ namespace sfui
 		/// <param name="minSize"></param>
 		/// <param name="maxSize"></param>
 		/// <param name="_parentSize"></param>
-		void calculateFinalMinMaxSizes(sf::Vector2u& minSize, sf::Vector2u& maxSize, const sf::Vector2u& _parentSize) const;
+		void calculateFinalMinMaxSizes(sf::Vector2u& minSize, sf::Vector2u& maxSize, const sf::Vector2u& _parentSize, const FlexProperty& _parentFlex) const;
 
 		/// <summary>
 		/// <paragraph>Calculates the content size based on the sizes of child elements.</paragraph>

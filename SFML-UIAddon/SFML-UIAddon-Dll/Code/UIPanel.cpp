@@ -1,4 +1,5 @@
 #include "Headers/SFUIL/UIPanel.hpp"
+#include "Headers/SFUIL/Containers/UIVisualContainer.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -8,8 +9,14 @@ namespace sfui
 {
 	UIPanel::UIPanel()
 	{
-		m_renderTexture = sf::RenderTexture(sf::Vector2u(640, 360));
 		m_size = sf::Vector2u(640, 360);
+		m_renderTexture = sf::RenderTexture(m_size);
+
+		m_rootElement = new UIVisualContainer("__ROOT_ELEMENT__");
+		m_rootElement->getPositionProperty().mode = PositionModeProperty::Absolute;
+		SizeProperty& rootSize = m_rootElement->getSizeProperty();
+		rootSize.size.width = SizeValueProperty{ .value = 100.f, .type = SizeValueTypeProperty::Percentage };
+		rootSize.size.height = SizeValueProperty{ .value = 100.f, .type = SizeValueTypeProperty::Percentage };
 	}
 
 	UIPanel::~UIPanel()
@@ -25,13 +32,8 @@ namespace sfui
 
 		m_renderTexture.clear(m_panelBackgroundColor);
 
-		// Default Hollow Rectangle Shape for Panel Background with Outline
-		sf::RectangleShape rectangleShape;
-		rectangleShape.setSize(sf::Vector2f(m_size));
-		rectangleShape.setFillColor(sf::Color::Transparent);
-		rectangleShape.setOutlineColor(sf::Color::White);
-		rectangleShape.setOutlineThickness(-4.0f);
-		m_renderTexture.draw(rectangleShape);
+		m_rootElement->render(m_renderTexture);
+		m_rootElement->drawToTarget(m_renderTexture);
 
 		m_renderTexture.display();
 	}

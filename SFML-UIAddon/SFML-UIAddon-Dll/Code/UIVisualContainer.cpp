@@ -1,13 +1,16 @@
 #include "Headers/SFUIL/Containers/UIVisualContainer.hpp"
+#include <iostream>
 
 namespace sfui
 {
 	UIVisualContainer::UIVisualContainer() : UIElement()
 	{
+		Initialize();
 	}
 
 	UIVisualContainer::UIVisualContainer(const char* _name) : UIElement(_name)
 	{
+		Initialize();
 	}
 
 	UIVisualContainer::~UIVisualContainer()
@@ -24,20 +27,39 @@ namespace sfui
 
 		reRenderIfDirty(_texture);
 
-		// Check for position mode
-		if (m_position.mode == PositionModeProperty::Relative)
+		m_renderTexture.clear(m_background.color);
+
+		// Render all child elements to the render texture
+		for (const auto& child : m_children)
 		{
-			// In relative mode, position is determined by the flex layout system
-			// Here we calculate position based on parent container and flex properties
-		}
-		else if (m_position.mode == PositionModeProperty::Absolute)
-		{
-			// In absolute mode, position is determined by the position values
+			child->render(m_renderTexture);
 		}
 	}
 
 	void UIVisualContainer::drawToTarget(sf::RenderTarget& _target)
 	{
+		// If display property is None, do not draw
+		if (m_display.type == DisplayValueTypeProperty::None)
+		{
+			return;
+		}
+
+		// Call Draw on all child elements
+		for (const auto& child : m_children)
+		{
+			child->drawToTarget(m_renderTexture);
+		}
+
+		m_renderTexture.display();
+
+		// Get Texture of RenderTexture and make a Sprite with it
+		const sf::Texture& texture = m_renderTexture.getTexture();
+		sf::Sprite sprite(texture);
+
+		// Then apply positioning and transformations
+		applyPositioningAndTransformations(_target, sprite);
+
+		_target.draw(sprite);
 	}
 
 	void UIVisualContainer::reRenderIfDirty(sf::RenderTexture& _texture)
@@ -48,27 +70,36 @@ namespace sfui
 		m_dirty = false;
 
 		sf::Vector2u newSize;
+		calculateNewSize(newSize, _texture.getSize(), m_parent->getConstFlexProperty());
 
-		calculateNewSize(newSize, _texture.getSize());
-
-		(void)m_renderTexture.resize(newSize);
+		if (!m_renderTexture.resize(newSize))
+		{
+			std::cout << "UIVisualContainer::reRenderIfDirty: (" << m_name << ") Failed to resize render texture to " << newSize.x << "x" << newSize.y << std::endl;
+		}
 	}
 
-	void UIVisualContainer::calculateNewSize(sf::Vector2u& newSize, const sf::Vector2u& _parentSize)
+	void UIVisualContainer::Initialize()
+	{
+		UIElement::Initialize();
+		(void)m_renderTexture.resize(sf::Vector2u(1u, 1u)); // Initial size, will be resized on first render
+		markDirty();
+	}
+
+	void UIVisualContainer::calculateNewSize(sf::Vector2u& newSize, const sf::Vector2u& _parentSize, const FlexProperty& _parentFlex)
 	{
 		// Calculate final minimum and maximum sizes based on SizeProperty constraints
 		sf::Vector2u minSize;
 		sf::Vector2u maxSize;
-		calculateFinalMinMaxSizes(minSize, maxSize, _parentSize);
+		calculateFinalMinMaxSizes(minSize, maxSize, _parentSize, _parentFlex);
 
 		// Calculate new size based on position mode
-		if (m_position.mode == PositionModeProperty::Absolute)
+		if (UIPropUtils::isPositionAbsolute(m_position))
 		{
-			calculateNewSizeInAbsolute(newSize, _parentSize);
+			calculateNewSizeInAbsolute(newSize, _parentSize, _parentFlex);
 		}
-		else if (m_position.mode == PositionModeProperty::Relative)
+		else if (UIPropUtils::isPositionRelative(m_position))
 		{
-			calculateNewSizeInRelative(newSize, _parentSize);
+			calculateNewSizeInRelative(newSize, _parentSize, _parentFlex);
 		}
 
 		// Clamp new size within min and max sizes
@@ -76,7 +107,7 @@ namespace sfui
 		newSize.y = UIPropUtils::clampUnsignedInt(newSize.y, minSize.y, maxSize.y);
 	}
 
-	void UIVisualContainer::calculateNewSizeInAbsolute(sf::Vector2u& newSize, const sf::Vector2u& _parentSize)
+	void UIVisualContainer::calculateNewSizeInAbsolute(sf::Vector2u& newSize, const sf::Vector2u& _parentSize, const FlexProperty& _parentFlex)
 	{
 		// Compute new size
 		const SizeVectorProperty& sizeProp = m_size.size;
@@ -87,32 +118,33 @@ namespace sfui
 		// Height
 		newSize.y = static_cast<unsigned int>(UIPropUtils::resolveValueToPixels(sizeProp.height, static_cast<float>(_parentSize.y)));
 
-		// If size is set to Auto (0), calculate content size
-		if (sizeProp.width.type == SizeValueTypeProperty::Auto || sizeProp.height.type == SizeValueTypeProperty::Auto)
+		// If height is set to Auto, calculate content size height
+		if (sizeProp.height.type == SizeValueTypeProperty::Auto)
 		{
 			sf::Vector2u contentSize;
 			calculateContentSize(contentSize);
-			if (sizeProp.width.type == SizeValueTypeProperty::Auto)
-			{
-				newSize.x = contentSize.x;
-			}
-			if (sizeProp.height.type == SizeValueTypeProperty::Auto)
-			{
-				newSize.y = contentSize.y;
-			}
+			newSize.y = contentSize.y;
+		}
+
+		// If width is set to Auto, calculate width using position left and right
+		if (sizeProp.width.type == SizeValueTypeProperty::Auto)
+		{
+			float left = UIPropUtils::resolveValueToPixels(m_position.left, static_cast<float>(_parentSize.x));
+			float right = UIPropUtils::resolveValueToPixels(m_position.right, static_cast<float>(_parentSize.x));
+			newSize.x = static_cast<unsigned int>(static_cast<float>(_parentSize.x) - left - right);
 		}
 	}
 
-	void UIVisualContainer::calculateNewSizeInRelative(sf::Vector2u& newSize, const sf::Vector2u& _parentSize)
+	void UIVisualContainer::calculateNewSizeInRelative(sf::Vector2u& newSize, const sf::Vector2u& _parentSize, const FlexProperty& _parentFlex)
 	{
 		// For Row and ReverseRow, the height is the same as the parent, the width is determined by all siblings
-		if (UIPropUtils::isFlexDirectionRowType(m_flex))
+		if (UIPropUtils::isFlexDirectionRowType(_parentFlex))
 		{
 			// Height takes full parent height
 			newSize.y = _parentSize.y;
 
 			// Width is distributed among siblings based on flex grow/shrink
-			float basicValue = resolveFinalBasicWidth(*this, _parentSize.x);
+			float basicValue = resolveFinalBasicWidth(*this, static_cast<float>(_parentSize.x));
 
 			float growShrinkFactor = 0.f;
 
@@ -126,7 +158,7 @@ namespace sfui
 					const FlexProperty& siblingFlex = sibling->getConstFlexProperty();
 					totalFlexGrow += siblingFlex.flexGrow.value;
 
-					float childBasic = resolveFinalBasicWidth(*sibling->as<UIVisualContainer>(), _parentSize.x);
+					float childBasic = resolveFinalBasicWidth(*sibling->as<UIVisualContainer>(), static_cast<float>(_parentSize.x));
 
 					totalBasic += childBasic;
 					totalFlexShrink += siblingFlex.flexShrink.value * childBasic;
@@ -142,16 +174,16 @@ namespace sfui
 				}
 			}
 
-			newSize.x = static_cast<unsigned int>(basicValue * growShrinkFactor);
+			newSize.x = static_cast<unsigned int>(basicValue + growShrinkFactor);
 		}
 		// For Column and ReverseColumn, the width is the same as the parent, the height is determined by all siblings
-		else if (UIPropUtils::isFlexDirectionColumnType(m_flex))
+		else if (UIPropUtils::isFlexDirectionColumnType(_parentFlex))
 		{
 			// Width takes full parent width
 			newSize.x = _parentSize.x;
 
 			// height is distributed among siblings based on flex grow/shrink
-			float basicValue = resolveFinalBasicHeight(*this, _parentSize.y);
+			float basicValue = resolveFinalBasicHeight(*this, static_cast<float>(_parentSize.y));
 
 			float growShrinkFactor = 0.f;
 
@@ -165,7 +197,8 @@ namespace sfui
 					const FlexProperty& siblingFlex = sibling->getConstFlexProperty();
 					totalFlexGrow += siblingFlex.flexGrow.value;
 
-					float childBasic = resolveFinalBasicHeight(*sibling->as<UIVisualContainer>(), _parentSize.y);
+					float childBasic = resolveFinalBasicHeight(*sibling->as<UIVisualContainer>(), static_cast<float>(_parentSize.y));
+
 
 					totalBasic += childBasic;
 					totalFlexShrink += siblingFlex.flexShrink.value * childBasic;
@@ -181,11 +214,11 @@ namespace sfui
 				}
 			}
 
-			newSize.y = static_cast<unsigned int>(basicValue * growShrinkFactor);
+			newSize.y = static_cast<unsigned int>(basicValue + growShrinkFactor);
 		}
 	}
 
-	void UIVisualContainer::calculateFinalMinMaxSizes(sf::Vector2u& minSize, sf::Vector2u& maxSize, const sf::Vector2u& _parentSize) const
+	void UIVisualContainer::calculateFinalMinMaxSizes(sf::Vector2u& minSize, sf::Vector2u& maxSize, const sf::Vector2u& _parentSize, const FlexProperty& _parentFlex) const
 	{
 		// Compute minimum size
 		const MinSizeVectorProperty& minProp = m_size.minSize;
@@ -195,7 +228,6 @@ namespace sfui
 
 		// Height
 		minSize.y = static_cast<unsigned int>(UIPropUtils::resolveValueToPixels(minProp.height, static_cast<float>(_parentSize.y)));
-		
 
 		// Compute maximum size
 		const MaxSizeVectorProperty& maxProp = m_size.maxSize;
@@ -246,7 +278,7 @@ namespace sfui
 
 			if (childSize.size.width.type == SizeValueTypeProperty::Auto)
 			{
-				// If width is also Auto, calculate content size
+				// If width is also Auto, use content size
 				sf::Vector2u contentSize;
 				_child.calculateContentSize(contentSize);
 				result = static_cast<float>(contentSize.x);
@@ -272,10 +304,10 @@ namespace sfui
 
 			if (childSize.size.height.type == SizeValueTypeProperty::Auto)
 			{
-				// If height is also Auto, calculate content size
+				// If height is also Auto, use content size
 				sf::Vector2u contentSize;
 				_child.calculateContentSize(contentSize);
-				result = static_cast<float>(contentSize.x);
+				result = static_cast<float>(contentSize.y);
 			}
 		}
 

@@ -503,6 +503,20 @@ namespace sfui
 		static float resolveAngleToDegrees(const TransformRotateValueProperty& _prop);
 
 		/// <summary>
+		/// <paragraph>Resolves a rotation angle property to radians based on its type.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <returns></returns>
+		static float resolveAngleToRadians(const TransformRotateValueProperty& _prop);
+
+		/// <summary>
+		/// <paragraph>Resolves a rotation angle property to sf::Angle based on its type.</paragraph>
+		/// </summary>
+		/// <param name="_prop"></param>
+		/// <returns></returns>
+		static sf::Angle resolveAngleToSfAngle(const TransformRotateValueProperty& _prop);
+
+		/// <summary>
 		/// <paragraph>Checks if the flex direction is of row or reverse row type.</paragraph>
 		/// </summary>
 		/// <param name="_flex"></param>
@@ -524,6 +538,20 @@ namespace sfui
 		static bool isFlexDirectionReverseType(const FlexProperty& _flex);
 
 		/// <summary>
+		/// <paragraph>Checks if the position mode is absolute.</paragraph>
+		/// </summary>
+		/// <param name="_position"></param>
+		/// <returns></returns>
+		static bool isPositionAbsolute(const PositionProperty& _position);
+
+		/// <summary>
+		/// <paragraph>Checks if the position mode is relative.</paragraph>
+		/// </summary>
+		/// <param name="_position"></param>
+		/// <returns></returns>
+		static bool isPositionRelative(const PositionProperty& _position);
+
+		/// <summary>
 		/// <paragraph>Clamps a float value between a minimum and maximum value.</paragraph>
 		/// </summary>
 		/// <param name="_value"></param>
@@ -540,5 +568,25 @@ namespace sfui
 		/// <param name="_max"></param>
 		/// <returns>>Returns _min if _value less than _min, _max if _value more than _max, otherwise simply returns _value.</returns>
 		static unsigned int clampUnsignedInt(unsigned int _value, unsigned int _min, unsigned int _max);
+
+		/// <summary>
+		/// <paragraph>Calculates the offset for an element based on JustifyContent property.</paragraph>
+		/// </summary>
+		/// <param name="_justifyContent"></param>
+		/// <param name="_siblingIndex"></param>
+		/// <param name="_siblingCount"></param>
+		/// <param name="_elementSize"></param>
+		/// <param name="_parentSize"></param>
+		/// <returns></returns>
+		static float calculateJustifyContentOffset(const JustifyContentProperty& _justifyContent, size_t _siblingIndex, size_t _siblingCount, float _elementSize, float _parentSize);
+
+		/// <summary>
+		/// <paragraph>Calculates the offset for an element based on AlignItems property.</paragraph>
+		/// </summary>
+		/// <param name="_alignItems"></param>
+		/// <param name="_elementSize"></param>
+		/// <param name="_parentSize"></param>
+		/// <returns></returns>
+		static float calculateAlignItemsOffset(const AlignItemsProperty& _alignItems, float _elementSize, float _parentSize);
 	};
 }

@@ -3,6 +3,7 @@
 #include "System/Exports.hpp"
 #include "System/UIElementProperty.hpp"
 #include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <vector>
 #include <concepts>
 
@@ -393,5 +394,17 @@ namespace sfui
 		/// </summary>
 		/// <param name="_texture">The RenderTexture assigned for layout calculations.</param>
 		virtual void reRenderIfDirty(sf::RenderTexture& _texture) = 0;
+
+		/// <summary>
+		/// <paragraph>Applies positioning and transformation properties to the given sprite before drawing.</paragraph>
+		/// </summary>
+		/// <param name="_target"></param>
+		/// <param name="_sprite"></param>
+		void applyPositioningAndTransformations(sf::RenderTarget& _target, sf::Sprite& _sprite);
+
+		/// <summary>
+		/// <paragraph>Initializes the UI Element. To be called during construction.</paragraph>
+		/// </summary>
+		virtual void Initialize() {};
 	};
 }
