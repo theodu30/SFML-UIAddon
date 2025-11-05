@@ -30,9 +30,6 @@ namespace sfui
 		reRenderIfDirty(_target);
 
 		// For UIVisualContainer, we simply draw the background as a rectangle shape
-		// Apply positioning and transformations
-		// Draw the sprite to the target
-		// Finnaly call drawToTarget on all children
 
 		sf::Vector2f targetSize(_target.getSize());
 		if (m_parent)
@@ -42,11 +39,23 @@ namespace sfui
 
 		sf::RectangleShape backgroundShape(m_renderSize);
 		backgroundShape.setFillColor(m_background.color);
+
+		if (m_border.width.value != 0.f)
+		{
+			backgroundShape.setOutlineThickness(m_border.width.value); // Positive thickness draws outward and negative inward
+			backgroundShape.setOutlineColor(m_border.color.color);
+		}
+
+		// Apply border radius if needed (SFML does not support rounded rectangles natively)
+		// (This would require a custom shape implementation, omitted for brevity)
+
 		computePosition(targetSize, backgroundShape.getGlobalBounds());
 		backgroundShape.setPosition(m_renderPosition);
 		applyTransformations(targetSize, backgroundShape);
 
 		_target.draw(backgroundShape);
+
+		// Finally, draw all child elements
 
 		for (auto& child : m_children)
 		{

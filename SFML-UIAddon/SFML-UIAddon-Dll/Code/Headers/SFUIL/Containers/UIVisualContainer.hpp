@@ -1,6 +1,5 @@
 #pragma once
 
-// Include Export.hpp and UIElement.hpp
 #include "../System/Exports.hpp"
 #include "../UIElement.hpp"
 

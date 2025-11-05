@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFUIL/UIPanel.hpp>
 #include <SFUIL/Containers/UIVisualContainer.hpp>
+#include <SFUIL/Graphics/RoundedRectangle.hpp>
 
 #include <iostream>
 
@@ -33,6 +34,15 @@ int main()
 	container2->addChild(container4);
 
 	bool rotating = false;
+
+    sfui::RoundedRectangle rounded;
+	rounded.setSize(sf::Vector2f(100.f, 100.f));
+	rounded.setRadius(20.f);
+	rounded.setPointsPerCorner(10);
+	rounded.setFillColor(sf::Color(100, 150, 250));
+	rounded.setPosition(sf::Vector2f(250.f, 200.f));
+	rounded.setOutlineColor(sf::Color::Yellow);
+	rounded.setOutlineThickness(5.f);
 
 	while (window.isOpen())
 	{
@@ -79,6 +89,8 @@ int main()
 
 		panel.render();
 		panel.drawToTarget(window);
+
+		window.draw(rounded);
 
 		window.display();
 	}

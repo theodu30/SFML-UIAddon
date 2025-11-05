@@ -25,6 +25,7 @@
     <ClInclude Include="Code\Headers\SFUIL\UIPanel.hpp" />
     <ClInclude Include="Code\Headers\SFUIL\UIElement.hpp" />
     <ClInclude Include="Code\Headers\SFUIL\System\UIElementProperty.hpp" />
+    <ClInclude Include="Code\Headers\SFUIL\Graphics\RoundedRectangle.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Anchor.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="Code\UIVisualContainer.cpp" />
     <ClCompile Include="Code\UIPanel.cpp" />
     <ClCompile Include="Code\UIElement.cpp" />
+    <ClCompile Include="Code\RoundedRectangle.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

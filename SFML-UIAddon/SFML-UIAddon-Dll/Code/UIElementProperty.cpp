@@ -105,36 +105,6 @@ namespace sfui
 		return 0.0f;
 	}
 
-	float UIPropUtils::resolveValueToPixels(const BorderWidthValueProperty& _prop, float _relativeTo)
-	{
-		switch (_prop.type)
-		{
-		case BorderWidthValueTypeProperty::Pixels:
-			return _prop.value;
-		default:
-			return 0.0f;
-		}
-
-		// Fail safe
-		return 0.0f;
-	}
-
-	float UIPropUtils::resolveValueToPixels(const BorderRadiusValueProperty& _prop, float _relativeTo)
-	{
-		switch (_prop.type)
-		{
-		case BorderRadiusValueTypeProperty::Pixels:
-			return _prop.value;
-		case BorderRadiusValueTypeProperty::Percentage:
-			return (_relativeTo * (_prop.value / 100.f));
-		default:
-			return 0.0f;
-		}
-
-		// Fail safe
-		return 0.0f;
-	}
-
 	float UIPropUtils::resolveValueToPixels(const TransformOriginValueProperty& _prop, float _relativeTo)
 	{
 		switch (_prop.type)

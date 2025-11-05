@@ -275,58 +275,21 @@ namespace sfui
 		sf::Color color = sf::Color::Black; // The color of the border
 	};
 
-	struct SFUIL_API BorderColorProperty
-	{
-		BorderColorValueProperty top;
-		BorderColorValueProperty right;
-		BorderColorValueProperty bottom;
-		BorderColorValueProperty left;
-	};
-
-	enum class SFUIL_API BorderWidthValueTypeProperty : char
-	{
-		Pixels
-	};
-
 	struct SFUIL_API BorderWidthValueProperty
 	{
 		float value = 0.f; // The value for the border width
-		BorderWidthValueTypeProperty type = BorderWidthValueTypeProperty::Pixels; // The type of the value
-	};
-
-	struct SFUIL_API BorderWidthProperty
-	{
-		BorderWidthValueProperty top;
-		BorderWidthValueProperty right;
-		BorderWidthValueProperty bottom;
-		BorderWidthValueProperty left;
-	};
-
-	enum class SFUIL_API BorderRadiusValueTypeProperty : char
-	{
-		Pixels,
-		Percentage
 	};
 
 	struct SFUIL_API BorderRadiusValueProperty
 	{
 		float value = 0.f; // The value for the border radius
-		BorderRadiusValueTypeProperty type = BorderRadiusValueTypeProperty::Pixels; // The type of the value
-	};
-
-	struct SFUIL_API BorderRadiusProperty
-	{
-		BorderRadiusValueProperty topLeft;
-		BorderRadiusValueProperty topRight;
-		BorderRadiusValueProperty bottomRight;
-		BorderRadiusValueProperty bottomLeft;
 	};
 
 	struct SFUIL_API BorderProperty
 	{
-		BorderColorProperty color;
-		BorderWidthProperty width;
-		BorderRadiusProperty radius;
+		BorderColorValueProperty color;
+		BorderWidthValueProperty width;
+		BorderRadiusValueProperty radius;
 	};
 
 	enum class SFUIL_API TransformOriginValueTypeProperty : char
@@ -454,22 +417,6 @@ namespace sfui
 		/// <param name="_relativeTo"></param>
 		/// <returns></returns>
 		static float resolveValueToPixels(const PaddingValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const BorderWidthValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const BorderRadiusValueProperty& _prop, float _relativeTo);
 
 		/// <summary>
 		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
