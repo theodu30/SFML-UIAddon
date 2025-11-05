@@ -4,6 +4,7 @@
 #include "System/UIElementProperty.hpp"
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
 #include <concepts>
 
@@ -27,16 +28,10 @@ namespace sfui
 		virtual ~UIElement() = default;
 
 		/// <summary>
-		/// <paragraph>Renders the UI Element to the provided RenderTexture.</paragraph>
-		/// </summary>
-		/// <param name="_texture">The RenderTexture to render to.</param>
-		virtual void render(sf::RenderTexture& _texture) = 0;
-
-		/// <summary>
 		/// <paragraph>Draws the UI Element to the provided RenderTarget.</paragraph>
 		/// </summary>
 		/// <param name="_target">The RenderTarget to draw to.</param>
-		virtual void drawToTarget(sf::RenderTarget& _target) = 0;
+		virtual void drawToTarget(sf::RenderTexture& _target) = 0;
 
 		/// <summary>
 		/// <paragraph>Getter for Spacing Property.</paragraph>
@@ -238,10 +233,16 @@ namespace sfui
 		std::vector<UIElement*>& getChildren();
 
 		/// <summary>
-		/// <paragraph>Gets the size of the internal RenderTexture.</paragraph>
+		/// <paragraph>Gets the render size of the UI Element after applying sizing and layout calculations.</paragraph>
 		/// </summary>
 		/// <returns></returns>
-		sf::Vector2u getTextureSize() const;
+		sf::Vector2f getRenderSize() const;
+
+		/// <summary>
+		/// <paragraph>Gets the render position of the UI Element after applying positioning and transformations.</paragraph>
+		/// </summary>
+		/// <returns></returns>
+		sf::Vector2f getRenderPosition() const;
 
 		/// <summary>
 		/// <paragraph>Cast the UI Element to a specific derived type from UIElement.</paragraph>
@@ -367,9 +368,10 @@ namespace sfui
 		const char* m_name = "UIElement"; // Name of the UI Element
 		std::vector<UIElement*> m_children; // Child UI Elements
 		UIElement* m_parent = nullptr; // Parent UI Element
-
-		sf::RenderTexture m_renderTexture; // Render texture for element rendering
 		bool m_dirty = true; // Flag indicating if the element needs to be re-rendered
+
+		sf::Vector2f m_renderSize; // Size used during the last render
+		sf::Vector2f m_renderPosition; // Position used during the last render
 
 		SpacingProperty m_spacing;
 		BorderProperty m_border;
@@ -396,11 +398,25 @@ namespace sfui
 		virtual void reRenderIfDirty(sf::RenderTexture& _texture) = 0;
 
 		/// <summary>
-		/// <paragraph>Applies positioning and transformation properties to the given sprite before drawing.</paragraph>
+		/// <paragraph>Computes the position of the UI Element based on its properties and the given bounds.</paragraph>
 		/// </summary>
 		/// <param name="_target"></param>
 		/// <param name="_sprite"></param>
-		void applyPositioningAndTransformations(sf::RenderTarget& _target, sf::Sprite& _sprite);
+		void computePosition(sf::Vector2f& _targetSize, const sf::FloatRect& _bounds);
+
+		/// <summary>
+		/// <paragraph>Applies transformation properties to the given sprite before drawing.</paragraph>
+		/// </summary>
+		/// <param name="_target"></param>
+		/// <param name="_sprite"></param>
+		void applyTransformations(sf::Vector2f& _targetSize, sf::Sprite& _sprite);
+
+		/// <summary>
+		/// <paragraph>Applies transformation properties to the given rectangle shape before drawing.</paragraph>
+		/// </summary>
+		/// <param name="_target"></param>
+		/// <param name="_sprite"></param>
+		void applyTransformations(sf::Vector2f& _targetSize, sf::RectangleShape& _shape);
 
 		/// <summary>
 		/// <paragraph>Initializes the UI Element. To be called during construction.</paragraph>

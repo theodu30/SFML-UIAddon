@@ -1,4 +1,5 @@
 #include "Headers/SFUIL/System/UIElementProperty.hpp"
+#include <cmath>
 
 namespace sfui
 {
@@ -229,6 +230,27 @@ namespace sfui
 
 		// Fail safe
 		return sf::degrees(0.f);
+	}
+
+	void UIPropUtils::normalizeAngle(TransformRotateValueProperty& _prop)
+	{
+		if (_prop.type == TransformRotateValueTypeProperty::Degrees)
+		{
+			_prop.value = std::fmod(_prop.value, 360.0f);
+			if (_prop.value < 0.0f)
+			{
+				_prop.value += 360.0f;
+			}
+		}
+		else if (_prop.type == TransformRotateValueTypeProperty::Radians)
+		{
+			const float twoPi = 2.0f * 3.14159265358979323846f;
+			_prop.value = std::fmod(_prop.value, twoPi);
+			if (_prop.value < 0.0f)
+			{
+				_prop.value += twoPi;
+			}
+		}
 	}
 
 	bool UIPropUtils::isFlexDirectionRowType(const FlexProperty& _flex)

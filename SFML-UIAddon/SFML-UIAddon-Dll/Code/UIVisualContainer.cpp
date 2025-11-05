@@ -1,5 +1,6 @@
 #include "Headers/SFUIL/Containers/UIVisualContainer.hpp"
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 namespace sfui
 {
@@ -17,26 +18,7 @@ namespace sfui
 	{
 	}
 
-	void UIVisualContainer::render(sf::RenderTexture& _texture)
-	{
-		// If display property is None, do not render
-		if (m_display.type == DisplayValueTypeProperty::None)
-		{
-			return;
-		}
-
-		reRenderIfDirty(_texture);
-
-		m_renderTexture.clear(m_background.color);
-
-		// Render all child elements to the render texture
-		for (const auto& child : m_children)
-		{
-			child->render(m_renderTexture);
-		}
-	}
-
-	void UIVisualContainer::drawToTarget(sf::RenderTarget& _target)
+	void UIVisualContainer::drawToTarget(sf::RenderTexture& _target)
 	{
 		// If display property is None, do not draw
 		if (m_display.type == DisplayValueTypeProperty::None)
@@ -44,22 +26,32 @@ namespace sfui
 			return;
 		}
 
-		// Call Draw on all child elements
-		for (const auto& child : m_children)
+		// Re-render if dirty
+		reRenderIfDirty(_target);
+
+		// For UIVisualContainer, we simply draw the background as a rectangle shape
+		// Apply positioning and transformations
+		// Draw the sprite to the target
+		// Finnaly call drawToTarget on all children
+
+		sf::Vector2f targetSize(_target.getSize());
+		if (m_parent)
 		{
-			child->drawToTarget(m_renderTexture);
+			targetSize = m_parent->getRenderSize();
 		}
 
-		m_renderTexture.display();
+		sf::RectangleShape backgroundShape(m_renderSize);
+		backgroundShape.setFillColor(m_background.color);
+		computePosition(targetSize, backgroundShape.getGlobalBounds());
+		backgroundShape.setPosition(m_renderPosition);
+		applyTransformations(targetSize, backgroundShape);
 
-		// Get Texture of RenderTexture and make a Sprite with it
-		const sf::Texture& texture = m_renderTexture.getTexture();
-		sf::Sprite sprite(texture);
+		_target.draw(backgroundShape);
 
-		// Then apply positioning and transformations
-		applyPositioningAndTransformations(_target, sprite);
-
-		_target.draw(sprite);
+		for (auto& child : m_children)
+		{
+			child->drawToTarget(_target);
+		}
 	}
 
 	void UIVisualContainer::reRenderIfDirty(sf::RenderTexture& _texture)
@@ -69,19 +61,31 @@ namespace sfui
 		// Perform re-rendering logic here
 		m_dirty = false;
 
-		sf::Vector2u newSize;
-		calculateNewSize(newSize, _texture.getSize(), m_parent->getConstFlexProperty());
-
-		if (!m_renderTexture.resize(newSize))
+		sf::Vector2u parentSize;
+		// Get parent size if exists
+		if (m_parent)
 		{
-			std::cout << "UIVisualContainer::reRenderIfDirty: (" << m_name << ") Failed to resize render texture to " << newSize.x << "x" << newSize.y << std::endl;
+			parentSize = sf::Vector2u(m_parent->getRenderSize());
 		}
+		else // No parent, use texture size
+		{
+			parentSize = _texture.getSize();
+		}
+
+		FlexProperty parentFlex;
+		if (m_parent) // Get parent flex property
+		{
+			parentFlex = m_parent->getConstFlexProperty();
+		} // If no parent, default flex property (not used in calculations)
+
+		sf::Vector2u newSize;
+		calculateNewSize(newSize, parentSize, parentFlex);
+		m_renderSize = sf::Vector2f(newSize);
 	}
 
 	void UIVisualContainer::Initialize()
 	{
 		UIElement::Initialize();
-		(void)m_renderTexture.resize(sf::Vector2u(1u, 1u)); // Initial size, will be resized on first render
 		markDirty();
 	}
 

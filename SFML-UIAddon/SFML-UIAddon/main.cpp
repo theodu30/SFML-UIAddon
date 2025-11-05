@@ -21,16 +21,18 @@ int main()
 	sfui::UIVisualContainer* container2 = new sfui::UIVisualContainer("Container 2");
 	sfui::UIVisualContainer* container3 = new sfui::UIVisualContainer("Container 3");
 	sfui::UIVisualContainer* container4 = new sfui::UIVisualContainer("Container 4");
-	container1->getBackgroundProperty().color = sf::Color(255, 0, 0, 191); // Semi-transparent red
-	container3->getBackgroundProperty().color = sf::Color(0, 0, 255, 191); // Semi-transparent blue
-	container4->getBackgroundProperty().color = sf::Color(0, 255, 0, 191); // Semi-transparent green
+	container1->getBackgroundProperty().color = sf::Color(255, 0, 0, 127); // Semi-transparent red
+	container3->getBackgroundProperty().color = sf::Color(0, 0, 255, 127); // Semi-transparent blue
+	container4->getBackgroundProperty().color = sf::Color(0, 255, 0, 127); // Semi-transparent green
 	container2->getFlexProperty().flexDirection = sfui::FlexDirectionProperty::Row;
-	container3->getTransformProperty().origin.x = { .value = 50.f, .type = sfui::TransformOriginValueTypeProperty::Percentage };
-	container3->getTransformProperty().origin.y = { .value = 50.f, .type = sfui::TransformOriginValueTypeProperty::Percentage };
+	container1->getTransformProperty().origin.x = { .value = 50.f, .type = sfui::TransformOriginValueTypeProperty::Percentage };
+	container1->getTransformProperty().origin.y = { .value = 100.f, .type = sfui::TransformOriginValueTypeProperty::Percentage };
 	panel.getRootElement()->addChild(container1);
 	panel.getRootElement()->addChild(container2);
 	container2->addChild(container3);
 	container2->addChild(container4);
+
+	bool rotating = false;
 
 	while (window.isOpen())
 	{
@@ -50,12 +52,25 @@ int main()
 				}
 				if (key == sf::Keyboard::Key::R)
 				{
-					if (sfui::UIVisualContainer* c = panel.getRootElement()->query<sfui::UIVisualContainer>("Container 3"))
+					rotating = !rotating;
+					if (!rotating)
 					{
-						sfui::TransformProperty& transform = c->getTransformProperty();
-						transform.rotate.angle.value += 15.f;
+						if (sfui::UIVisualContainer* c = panel.getRootElement()->query<sfui::UIVisualContainer>("Container 1"))
+						{
+							const sfui::TransformProperty& transform = c->getConstTransformProperty();
+							std::cout << "Stopped rotating. Final angle: " << transform.rotate.angle.value << " degrees." << std::endl;
+						}
 					}
 				}
+			}
+		}
+
+		if (rotating)
+		{
+			if (sfui::UIVisualContainer* c = panel.getRootElement()->query<sfui::UIVisualContainer>("Container 1"))
+			{
+				sfui::TransformProperty& transform = c->getTransformProperty();
+				transform.rotate.angle.value += 15.f;
 			}
 		}
 

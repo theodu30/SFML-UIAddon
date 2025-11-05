@@ -517,6 +517,11 @@ namespace sfui
 		static sf::Angle resolveAngleToSfAngle(const TransformRotateValueProperty& _prop);
 
 		/// <summary>
+		/// <paragraph>Checks the angle type and normalizes the angle value to be within valid range.</paragraph>
+		/// </summary>
+		static void normalizeAngle(TransformRotateValueProperty& _prop);
+
+		/// <summary>
 		/// <paragraph>Checks if the flex direction is of row or reverse row type.</paragraph>
 		/// </summary>
 		/// <param name="_flex"></param>

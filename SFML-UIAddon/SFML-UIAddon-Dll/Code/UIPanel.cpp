@@ -32,7 +32,6 @@ namespace sfui
 
 		m_renderTexture.clear(m_panelBackgroundColor);
 
-		m_rootElement->render(m_renderTexture);
 		m_rootElement->drawToTarget(m_renderTexture);
 
 		m_renderTexture.display();

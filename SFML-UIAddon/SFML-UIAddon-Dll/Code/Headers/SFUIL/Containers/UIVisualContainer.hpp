@@ -26,16 +26,10 @@ namespace sfui
 		~UIVisualContainer();
 
 		/// <summary>
-		/// <paragraph>Renders the UIVisualContainer to the provided RenderTexture.</paragraph>
-		/// </summary>
-		/// <param name="_texture"></param>
-		void render(sf::RenderTexture& _texture) override;
-
-		/// <summary>
 		/// <paragraph>Draws the UIVisualContainer to the provided RenderTarget.</paragraph>
 		/// </summary>
 		/// <param name="_target"></param>
-		void drawToTarget(sf::RenderTarget& _target) override;
+		void drawToTarget(sf::RenderTexture& _target) override;
 	protected:
 		/// <summary>
 		/// <paragraph>Re-renders the UIVisualContainer texture if it is marked as dirty.</paragraph>

@@ -1,4 +1,5 @@
 #include "Headers/SFUIL/UIElement.hpp"
+#include <iostream>
 
 namespace sfui
 {
@@ -188,9 +189,14 @@ namespace sfui
 		return m_children;
 	}
 
-	sf::Vector2u UIElement::getTextureSize() const
+	sf::Vector2f UIElement::getRenderSize() const
 	{
-		return m_renderTexture.getSize();
+		return m_renderSize;
+	}
+
+	sf::Vector2f UIElement::getRenderPosition() const
+	{
+		return m_renderPosition;
 	}
 
 	void UIElement::markDirty()
@@ -202,14 +208,9 @@ namespace sfui
 		}
 	}
 
-	void UIElement::applyPositioningAndTransformations(sf::RenderTarget& _target, sf::Sprite& _sprite)
+	void UIElement::computePosition(sf::Vector2f& _targetSize, const sf::FloatRect& _bounds)
 	{
-		// Get target size
-		sf::Vector2u targetSize = _target.getSize();
-
 		// Apply Positioning using m_position, m_align, etc.
-
-		// First: Position m_position with up and down
 		float posX = 0.f;
 		float posY = 0.f;
 		// Check if position is absolute
@@ -218,23 +219,23 @@ namespace sfui
 			// Horizontal Positioning
 			if (m_position.left.type != PositionValueTypeProperty::Auto)
 			{
-				posX = UIPropUtils::resolveValueToPixels(m_position.left, static_cast<float>(targetSize.x));
+				posX = UIPropUtils::resolveValueToPixels(m_position.left, _targetSize.x);
 			}
 			else if (m_position.right.type != PositionValueTypeProperty::Auto)
 			{
-				float rightPos = UIPropUtils::resolveValueToPixels(m_position.right, static_cast<float>(targetSize.x));
-				posX = static_cast<float>(targetSize.x) - rightPos - _sprite.getGlobalBounds().size.x;
+				float rightPos = UIPropUtils::resolveValueToPixels(m_position.right, _targetSize.x);
+				posX = _targetSize.x - rightPos - _bounds.size.x;
 			}
 
 			//Vertical Positioning
 			if (m_position.top.type != PositionValueTypeProperty::Auto)
 			{
-				posY = UIPropUtils::resolveValueToPixels(m_position.top, static_cast<float>(targetSize.y));
+				posY = UIPropUtils::resolveValueToPixels(m_position.top, _targetSize.y);
 			}
 			else if (m_position.bottom.type != PositionValueTypeProperty::Auto)
 			{
-				float bottomPos = UIPropUtils::resolveValueToPixels(m_position.bottom, static_cast<float>(targetSize.y));
-				posY = static_cast<float>(targetSize.y) - bottomPos - _sprite.getGlobalBounds().size.y;
+				float bottomPos = UIPropUtils::resolveValueToPixels(m_position.bottom, _targetSize.y);
+				posY = _targetSize.y - bottomPos - _bounds.size.y;
 			}
 		}
 		// Check if position is relative
@@ -266,16 +267,16 @@ namespace sfui
 				if (UIPropUtils::isFlexDirectionRowType(parentFlex))
 				{
 					// Horizontal Positioning based on JustifyContent
-					posX = UIPropUtils::calculateJustifyContentOffset(parentAlign.justifyContent, siblingIndex, siblingCount, _sprite.getGlobalBounds().size.x, static_cast<float>(targetSize.x));
+					posX = UIPropUtils::calculateJustifyContentOffset(parentAlign.justifyContent, siblingIndex, siblingCount, _bounds.size.x, _targetSize.x);
 					// Vertical Positioning based on AlignItems
-					posY = UIPropUtils::calculateAlignItemsOffset(parentAlign.alignItems, _sprite.getGlobalBounds().size.y, static_cast<float>(targetSize.y));
+					posY = UIPropUtils::calculateAlignItemsOffset(parentAlign.alignItems, _bounds.size.y, _targetSize.y);
 				}
 				else if (UIPropUtils::isFlexDirectionColumnType(parentFlex))
 				{
 					// Vertical Positioning based on JustifyContent
-					posY = UIPropUtils::calculateJustifyContentOffset(parentAlign.justifyContent, siblingIndex, siblingCount, _sprite.getGlobalBounds().size.y, static_cast<float>(targetSize.y));
+					posY = UIPropUtils::calculateJustifyContentOffset(parentAlign.justifyContent, siblingIndex, siblingCount, _bounds.size.y, _targetSize.y);
 					// Horizontal Positioning based on AlignItems
-					posX = UIPropUtils::calculateAlignItemsOffset(parentAlign.alignItems, _sprite.getGlobalBounds().size.x, static_cast<float>(targetSize.x));
+					posX = UIPropUtils::calculateAlignItemsOffset(parentAlign.alignItems, _bounds.size.x, _targetSize.x);
 				}
 			}
 			// If no parent (root element), position at (0,0)
@@ -285,14 +286,26 @@ namespace sfui
 				posY = 0.f;
 			}
 		}
-		_sprite.setPosition(sf::Vector2f(posX, posY));
 
-		// Then: Apply Transformations using m_transform (translate, scale, rotate)
+		// Apply parent position offset if exists
+		if (m_parent)
+		{
+			sf::Vector2f parentPos = m_parent->getRenderPosition();
+			posX += parentPos.x;
+			posY += parentPos.y;
+		}
 
+		// Set render position
+		m_renderPosition = sf::Vector2f(posX, posY);
+	}
+
+	void UIElement::applyTransformations(sf::Vector2f& _targetSize, sf::Sprite& _sprite)
+	{
+		// Apply Transformations using m_transform (origin, translate, scale, rotate)
 		// Apply Origin
 		sf::Vector2f origin(
-			UIPropUtils::resolveValueToPixels(m_transform.origin.x, static_cast<float>(_sprite.getGlobalBounds().size.x)),
-			UIPropUtils::resolveValueToPixels(m_transform.origin.y, static_cast<float>(_sprite.getGlobalBounds().size.y))
+			UIPropUtils::resolveValueToPixels(m_transform.origin.x, _sprite.getGlobalBounds().size.x),
+			UIPropUtils::resolveValueToPixels(m_transform.origin.y, _sprite.getGlobalBounds().size.y)
 		);
 		_sprite.setOrigin(origin);
 
@@ -301,8 +314,8 @@ namespace sfui
 
 		// Apply Translation
 		sf::Vector2f translation(
-			UIPropUtils::resolveValueToPixels(m_transform.translate.x, static_cast<float>(targetSize.x)),
-			UIPropUtils::resolveValueToPixels(m_transform.translate.y, static_cast<float>(targetSize.y))
+			UIPropUtils::resolveValueToPixels(m_transform.translate.x, _targetSize.x),
+			UIPropUtils::resolveValueToPixels(m_transform.translate.y, _targetSize.y)
 		);
 		_sprite.move(translation);
 
@@ -311,7 +324,38 @@ namespace sfui
 		_sprite.setScale(scale);
 
 		// Apply Rotation
+		UIPropUtils::normalizeAngle(m_transform.rotate.angle);
 		sf::Angle rotation = UIPropUtils::resolveAngleToSfAngle(m_transform.rotate.angle);
 		_sprite.setRotation(rotation);
+	}
+
+	void UIElement::applyTransformations(sf::Vector2f& _targetSize, sf::RectangleShape& _shape)
+	{
+		// Apply Transformations using m_transform (origin, translate, scale, rotate)
+		// Apply Origin
+		sf::Vector2f origin(
+			UIPropUtils::resolveValueToPixels(m_transform.origin.x, _shape.getGlobalBounds().size.x),
+			UIPropUtils::resolveValueToPixels(m_transform.origin.y, _shape.getGlobalBounds().size.y)
+		);
+		_shape.setOrigin(origin);
+
+		// Apply origin offset to position
+		_shape.move(origin);
+
+		// Apply Translation
+		sf::Vector2f translation(
+			UIPropUtils::resolveValueToPixels(m_transform.translate.x, _targetSize.x),
+			UIPropUtils::resolveValueToPixels(m_transform.translate.y, _targetSize.y)
+		);
+		_shape.move(translation);
+
+		// Apply Scaling
+		sf::Vector2f scale(m_transform.scale.x.value, m_transform.scale.y.value);
+		_shape.setScale(scale);
+
+		// Apply Rotation
+		UIPropUtils::normalizeAngle(m_transform.rotate.angle);
+		sf::Angle rotation = UIPropUtils::resolveAngleToSfAngle(m_transform.rotate.angle);
+		_shape.setRotation(rotation);
 	}
 }
