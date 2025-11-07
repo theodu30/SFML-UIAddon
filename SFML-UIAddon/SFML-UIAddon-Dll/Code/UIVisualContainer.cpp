@@ -1,6 +1,6 @@
 #include "Headers/SFUIL/Containers/UIVisualContainer.hpp"
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include "math.h"
 
 namespace sfui
 {
@@ -37,23 +37,7 @@ namespace sfui
 			targetSize = m_parent->getRenderSize();
 		}
 
-		sf::RectangleShape backgroundShape(m_renderSize);
-		backgroundShape.setFillColor(m_background.color);
-
-		if (m_border.width.value != 0.f)
-		{
-			backgroundShape.setOutlineThickness(m_border.width.value); // Positive thickness draws outward and negative inward
-			backgroundShape.setOutlineColor(m_border.color.color);
-		}
-
-		// Apply border radius if needed (SFML does not support rounded rectangles natively)
-		// (This would require a custom shape implementation, omitted for brevity)
-
-		computePosition(targetSize, backgroundShape.getGlobalBounds());
-		backgroundShape.setPosition(m_renderPosition);
-		applyTransformations(targetSize, backgroundShape);
-
-		_target.draw(backgroundShape);
+		drawBackground(_target, targetSize);
 
 		// Finally, draw all child elements
 
@@ -70,15 +54,10 @@ namespace sfui
 		// Perform re-rendering logic here
 		m_dirty = false;
 
-		sf::Vector2u parentSize;
-		// Get parent size if exists
-		if (m_parent)
+		sf::Vector2u parentSize = _texture.getSize(); // Default to texture size if no parent
+		if (m_parent) // Get parent size if exists
 		{
 			parentSize = sf::Vector2u(m_parent->getRenderSize());
-		}
-		else // No parent, use texture size
-		{
-			parentSize = _texture.getSize();
 		}
 
 		FlexProperty parentFlex;

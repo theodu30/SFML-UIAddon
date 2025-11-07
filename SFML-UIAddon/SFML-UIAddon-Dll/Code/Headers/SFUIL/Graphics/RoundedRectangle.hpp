@@ -20,9 +20,9 @@ namespace sfui
 
         float getRadius();
 
-        void setPointsPerCorner(float _points);
+        void setPointsPerCorner(size_t _points);
 
-        int getPointsPerCorner();
+        size_t getPointsPerCorner();
 
     private:
         size_t m_pointsPerCorner = 2;

@@ -22,7 +22,9 @@ namespace sfui
 		// Otherwise, calculate rounded corner points
 		else
 		{
-			size_t cornerType = _index / m_pointsPerCorner;
+			// Cap radius to half the smallest dimension if m_radius is too large
+			float finalRadius = std::min(std::min(m_size.x, m_size.y) / 2.0f, m_radius);
+			// Calculate angle for the current point
 			float angle = 0;
 			bool isLastPointOnCorner = (_index % m_pointsPerCorner == m_pointsPerCorner - 1);
 			if (isLastPointOnCorner)
@@ -33,25 +35,32 @@ namespace sfui
 			{
 				angle = (_index % m_pointsPerCorner) * 90.f / m_pointsPerCorner;
 			}
+			// Determine which corner we are in and adjust the base point and angle accordingly
 			sf::Vector2f point;
+			size_t cornerType = _index / m_pointsPerCorner;
 			switch (cornerType)
 			{
-			case 0:
-				point = { m_radius, m_radius };
+			case 0: // Top-left corner
+				point.x = finalRadius;
+				point.y = finalRadius;
 				angle -= 180;
 				break;
-			case 1:
-				point = { m_size.x - m_radius, m_radius };
+			case 1: // Top-right corner
+				point.x = m_size.x - finalRadius;
+				point.y = finalRadius;
 				angle -= 90;
 				break;
-			case 2:
-				point = { m_size.x - m_radius, m_size.y - m_radius };
+			case 2: // Bottom-right corner
+				point.x = m_size.x - finalRadius;
+				point.y = m_size.y - finalRadius;
 				break;
-			default:
-				point = { m_radius, m_size.y - m_radius };
+			default: // Bottom-left corner (could be case 3)
+				point.x = finalRadius;
+				point.y = m_size.y - finalRadius;
 				angle += 90;
 			}
-			point += { cosf(angle * M_PI / 180) * m_radius, sinf(angle * M_PI / 180) * m_radius };
+			point.x += cosf(angle * M_PI / 180) * finalRadius;
+			point.y += sinf(angle * M_PI / 180) * finalRadius;
 			return point;
 		}
 	}
@@ -78,13 +87,13 @@ namespace sfui
 		return m_radius;
 	}
 
-	void RoundedRectangle::setPointsPerCorner(float _points)
+	void RoundedRectangle::setPointsPerCorner(size_t _points)
 	{
 		m_pointsPerCorner = _points;
 		update();
 	}
 
-	int RoundedRectangle::getPointsPerCorner()
+	size_t RoundedRectangle::getPointsPerCorner()
 	{
 		return m_pointsPerCorner;
 	}

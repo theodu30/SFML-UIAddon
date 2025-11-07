@@ -4,7 +4,7 @@
 #include "System/UIElementProperty.hpp"
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Shape.hpp>
 #include <vector>
 #include <concepts>
 
@@ -402,21 +402,28 @@ namespace sfui
 		/// </summary>
 		/// <param name="_target"></param>
 		/// <param name="_sprite"></param>
-		void computePosition(sf::Vector2f& _targetSize, const sf::FloatRect& _bounds);
+		void computePosition(const sf::Vector2f& _targetSize, const sf::FloatRect& _bounds);
 
 		/// <summary>
 		/// <paragraph>Applies transformation properties to the given sprite before drawing.</paragraph>
 		/// </summary>
 		/// <param name="_target"></param>
 		/// <param name="_sprite"></param>
-		void applyTransformations(sf::Vector2f& _targetSize, sf::Sprite& _sprite);
+		void applyTransformations(const sf::Vector2f& _targetSize, sf::Sprite& _sprite);
 
 		/// <summary>
 		/// <paragraph>Applies transformation properties to the given rectangle shape before drawing.</paragraph>
 		/// </summary>
 		/// <param name="_target"></param>
 		/// <param name="_sprite"></param>
-		void applyTransformations(sf::Vector2f& _targetSize, sf::RectangleShape& _shape);
+		void applyTransformations(const sf::Vector2f& _targetSize, sf::Shape& _shape);
+
+		/// <summary>
+		/// <paragraph>Draws the background of the UI Element based on its background properties.</paragraph>
+		/// </summary>
+		/// <param name="_target"></param>
+		/// <param name="_targetSize"></param>
+		void drawBackground(sf::RenderTexture& _target, const sf::Vector2f& _targetSize);
 
 		/// <summary>
 		/// <paragraph>Initializes the UI Element. To be called during construction.</paragraph>

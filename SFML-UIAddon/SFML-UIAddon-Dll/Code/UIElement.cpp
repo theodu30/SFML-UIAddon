@@ -1,5 +1,7 @@
 #include "Headers/SFUIL/UIElement.hpp"
 #include <iostream>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include "Headers/SFUIL/Graphics/RoundedRectangle.hpp"
 
 namespace sfui
 {
@@ -208,7 +210,7 @@ namespace sfui
 		}
 	}
 
-	void UIElement::computePosition(sf::Vector2f& _targetSize, const sf::FloatRect& _bounds)
+	void UIElement::computePosition(const sf::Vector2f& _targetSize, const sf::FloatRect& _bounds)
 	{
 		// Apply Positioning using m_position, m_align, etc.
 		float posX = 0.f;
@@ -299,7 +301,7 @@ namespace sfui
 		m_renderPosition = sf::Vector2f(posX, posY);
 	}
 
-	void UIElement::applyTransformations(sf::Vector2f& _targetSize, sf::Sprite& _sprite)
+	void UIElement::applyTransformations(const sf::Vector2f& _targetSize, sf::Sprite& _sprite)
 	{
 		// Apply Transformations using m_transform (origin, translate, scale, rotate)
 		// Apply Origin
@@ -329,7 +331,7 @@ namespace sfui
 		_sprite.setRotation(rotation);
 	}
 
-	void UIElement::applyTransformations(sf::Vector2f& _targetSize, sf::RectangleShape& _shape)
+	void UIElement::applyTransformations(const sf::Vector2f& _targetSize, sf::Shape& _shape)
 	{
 		// Apply Transformations using m_transform (origin, translate, scale, rotate)
 		// Apply Origin
@@ -357,5 +359,44 @@ namespace sfui
 		UIPropUtils::normalizeAngle(m_transform.rotate.angle);
 		sf::Angle rotation = UIPropUtils::resolveAngleToSfAngle(m_transform.rotate.angle);
 		_shape.setRotation(rotation);
+	}
+
+	void UIElement::drawBackground(sf::RenderTexture& _target, const sf::Vector2f& _targetSize)
+	{
+		size_t pointsPerCorner = static_cast<size_t>(std::fmaxf(1.f, std::ceilf(m_border.radius.value)));
+		float radius = m_border.radius.value;
+		if (pointsPerCorner == 1 || radius == 0.f)
+		{
+			sf::RectangleShape backgroundShape;
+			backgroundShape.setSize(m_renderSize);
+			backgroundShape.setFillColor(m_background.color);
+			// Positive thickness draws outward and negative inward
+			backgroundShape.setOutlineThickness(m_border.width.value);
+			backgroundShape.setOutlineColor(m_border.color.color);
+
+			computePosition(_targetSize, backgroundShape.getGlobalBounds());
+			backgroundShape.setPosition(m_renderPosition);
+			applyTransformations(_targetSize, backgroundShape);
+
+			_target.draw(backgroundShape);
+		}
+		else
+		{
+			RoundedRectangle backgroundShape;
+			backgroundShape.setSize(m_renderSize);
+			backgroundShape.setFillColor(m_background.color);
+			// Negative thickness draws outward and positive inward
+			backgroundShape.setOutlineThickness(-m_border.width.value);
+			backgroundShape.setOutlineColor(m_border.color.color);
+			backgroundShape.setRadius(m_border.radius.value);
+			// Set number of points per corner for smoother corners depending on the radius
+			backgroundShape.setPointsPerCorner(pointsPerCorner);
+
+			computePosition(_targetSize, backgroundShape.getGlobalBounds());
+			backgroundShape.setPosition(m_renderPosition);
+			applyTransformations(_targetSize, backgroundShape);
+
+			_target.draw(backgroundShape);
+		}
 	}
 }

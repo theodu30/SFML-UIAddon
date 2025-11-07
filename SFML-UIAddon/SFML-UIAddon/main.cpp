@@ -28,21 +28,15 @@ int main()
 	container2->getFlexProperty().flexDirection = sfui::FlexDirectionProperty::Row;
 	container1->getTransformProperty().origin.x = { .value = 50.f, .type = sfui::TransformOriginValueTypeProperty::Percentage };
 	container1->getTransformProperty().origin.y = { .value = 100.f, .type = sfui::TransformOriginValueTypeProperty::Percentage };
+	container1->getBorderProperty().radius.value = 20.f;
+	container1->getBorderProperty().width.value = 5.f;
+	container1->getBorderProperty().color.color = sf::Color(255, 0, 0, 191);
 	panel.getRootElement()->addChild(container1);
 	panel.getRootElement()->addChild(container2);
 	container2->addChild(container3);
 	container2->addChild(container4);
 
 	bool rotating = false;
-
-    sfui::RoundedRectangle rounded;
-	rounded.setSize(sf::Vector2f(100.f, 100.f));
-	rounded.setRadius(20.f);
-	rounded.setPointsPerCorner(10);
-	rounded.setFillColor(sf::Color(100, 150, 250));
-	rounded.setPosition(sf::Vector2f(250.f, 200.f));
-	rounded.setOutlineColor(sf::Color::Yellow);
-	rounded.setOutlineThickness(5.f);
 
 	while (window.isOpen())
 	{
@@ -89,8 +83,6 @@ int main()
 
 		panel.render();
 		panel.drawToTarget(window);
-
-		window.draw(rounded);
 
 		window.display();
 	}
