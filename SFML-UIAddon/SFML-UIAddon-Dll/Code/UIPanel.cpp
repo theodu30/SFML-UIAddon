@@ -45,16 +45,13 @@ namespace sfui
 			return;
 		}
 
-		// Get Texture of RenderTexture and make a Sprite with it
 		const sf::Texture& texture = m_renderTexture.getTexture();
 		sf::Sprite sprite(texture);
 
-		// Set Position of Sprite based on Alignment and Offset
 		sf::Vector2u targetSize = _target.getSize();
 		sf::Vector2f position = Anchor::getAnchoredPosition(targetSize, m_size, m_alignment, m_offset);
 		sprite.setPosition(sf::Vector2f(position));
 
-		// Draw RenderTexture to _target
 		_target.draw(sprite);
 	}
 

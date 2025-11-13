@@ -50,15 +50,13 @@ namespace sfui
 
 	bool UIElement::removeFromHierarchy()
 	{
-		// Remove from parent first
 		removeFromParent();
-		// Recursively remove all children
 		for (UIElement* child : m_children)
 		{
 			if (child != nullptr)
 			{
 				child->removeFromHierarchy();
-				delete child; // Assuming ownership and responsibility for deletion
+				delete child;
 			}
 		}
 		m_children.clear();
@@ -91,13 +89,10 @@ namespace sfui
 
 	void UIElement::computePosition(const sf::Vector2f& _targetSize, const sf::FloatRect& _bounds)
 	{
-		// Apply Positioning using m_position, m_align, etc.
 		float posX = 0.f;
 		float posY = 0.f;
-		// Check if position is absolute
 		if (UIPropUtils::isPositionAbsolute(m_position))
 		{
-			// Horizontal Positioning
 			if (m_position.getLeft().type != PositionProperty::ValueType::Auto)
 			{
 				posX = m_position.getLeft().resolveToPixels(_targetSize.x);
@@ -108,7 +103,6 @@ namespace sfui
 				posX = _targetSize.x - rightPos - _bounds.size.x;
 			}
 
-			//Vertical Positioning
 			if (m_position.getTop().type != PositionProperty::ValueType::Auto)
 			{
 				posY = m_position.getTop().resolveToPixels(_targetSize.y);
@@ -119,21 +113,16 @@ namespace sfui
 				posY = _targetSize.y - bottomPos - _bounds.size.y;
 			}
 		}
-		// Check if position is relative
 		else if (UIPropUtils::isPositionRelative(m_position))
 		{
 			if (m_parent)
 			{
-				// Get parent align property (there will always be a parent for relative positioning because root element exists)
 				const AlignProperty& parentAlign = m_parent->getConstProperty<AlignProperty>();
 
-				// Get parent flex property
 				const FlexProperty& parentFlex = m_parent->getConstProperty<FlexProperty>();
 
-				// Get number of siblings
 				size_t siblingCount = m_parent->getChildCount();
 
-				// Get index among siblings
 				size_t siblingIndex = 0;
 				for (size_t i = 0; i < siblingCount; ++i)
 				{
@@ -144,23 +133,17 @@ namespace sfui
 					}
 				}
 
-				// Check for flex direction
 				if (UIPropUtils::isFlexDirectionRowType(parentFlex))
 				{
-					// Horizontal Positioning based on JustifyContent
 					posX = UIPropUtils::calculateJustifyContentOffset(parentAlign, siblingIndex, siblingCount, _bounds.size.x, _targetSize.x);
-					// Vertical Positioning based on AlignItems
 					posY = UIPropUtils::calculateAlignItemsOffset(parentAlign, _bounds.size.y, _targetSize.y);
 				}
 				else if (UIPropUtils::isFlexDirectionColumnType(parentFlex))
 				{
-					// Vertical Positioning based on JustifyContent
 					posY = UIPropUtils::calculateJustifyContentOffset(parentAlign, siblingIndex, siblingCount, _bounds.size.y, _targetSize.y);
-					// Horizontal Positioning based on AlignItems
 					posX = UIPropUtils::calculateAlignItemsOffset(parentAlign, _bounds.size.x, _targetSize.x);
 				}
 			}
-			// If no parent (root element), position at (0,0)
 			else
 			{
 				posX = 0.f;
@@ -168,7 +151,6 @@ namespace sfui
 			}
 		}
 
-		// Apply parent position offset if exists
 		if (m_parent)
 		{
 			sf::Vector2f parentPos = m_parent->getRenderPosition();
@@ -176,35 +158,28 @@ namespace sfui
 			posY += parentPos.y;
 		}
 
-		// Set render position
 		m_renderPosition = sf::Vector2f(posX, posY);
 	}
 
 	void UIElement::applyTransformations(const sf::Vector2f& _targetSize, sf::Sprite& _sprite)
 	{
-		// Apply Transformations using m_transform (origin, translate, scale, rotate)
-		// Apply Origin
 		sf::Vector2f origin(
 			m_transform.getOrigin().x.resolveToPixels(_sprite.getGlobalBounds().size.x),
 			m_transform.getOrigin().y.resolveToPixels(_sprite.getGlobalBounds().size.y)
 		);
 		_sprite.setOrigin(origin);
 
-		// Apply origin offset to position
 		_sprite.move(origin);
 
-		// Apply Translation
 		sf::Vector2f translation(
 			m_transform.getTranslate().x.resolveToPixels(_targetSize.x),
 			m_transform.getTranslate().y.resolveToPixels(_targetSize.y)
 		);
 		_sprite.move(translation);
 
-		// Apply Scaling
 		sf::Vector2f scale(m_transform.getScale().x, m_transform.getScale().y);
 		_sprite.setScale(scale);
 
-		// Apply Rotation
 		m_transform.setRotate(UIPropUtils::normalizedAngle(m_transform.getRotate()));
 		sf::Angle rotation = m_transform.getRotate().resolveToSfAngle();
 		_sprite.setRotation(rotation);
@@ -212,29 +187,23 @@ namespace sfui
 
 	void UIElement::applyTransformations(const sf::Vector2f& _targetSize, sf::Shape& _shape)
 	{
-		// Apply Transformations using m_transform (origin, translate, scale, rotate)
-		// Apply Origin
 		sf::Vector2f origin(
 			m_transform.getOrigin().x.resolveToPixels(_shape.getGlobalBounds().size.x),
 			m_transform.getOrigin().y.resolveToPixels(_shape.getGlobalBounds().size.y)
 		);
 		_shape.setOrigin(origin);
 
-		// Apply origin offset to position
 		_shape.move(origin);
 
-		// Apply Translation
 		sf::Vector2f translation(
 			m_transform.getTranslate().x.resolveToPixels(_targetSize.x),
 			m_transform.getTranslate().y.resolveToPixels(_targetSize.y)
 		);
 		_shape.move(translation);
 
-		// Apply Scaling
 		sf::Vector2f scale(m_transform.getScale().x, m_transform.getScale().y);
 		_shape.setScale(scale);
 
-		// Apply Rotation
 		m_transform.setRotate(UIPropUtils::normalizedAngle(m_transform.getRotate()));
 		sf::Angle rotation = m_transform.getRotate().resolveToSfAngle();
 		_shape.setRotation(rotation);
@@ -249,7 +218,6 @@ namespace sfui
 			sf::RectangleShape backgroundShape;
 			backgroundShape.setSize(m_renderSize);
 			backgroundShape.setFillColor(m_background.getColor());
-			// Positive thickness draws outward and negative inward
 			backgroundShape.setOutlineThickness(m_border.getWidth());
 			backgroundShape.setOutlineColor(m_border.getColor());
 
@@ -264,11 +232,9 @@ namespace sfui
 			RoundedRectangle backgroundShape;
 			backgroundShape.setSize(m_renderSize);
 			backgroundShape.setFillColor(m_background.getColor());
-			// Negative thickness draws outward and positive inward
 			backgroundShape.setOutlineThickness(-m_border.getWidth());
 			backgroundShape.setOutlineColor(m_border.getColor());
 			backgroundShape.setRadius(m_border.getRadius());
-			// Set number of points per corner for smoother corners depending on the radius
 			backgroundShape.setPointsPerCorner(pointsPerCorner);
 
 			computePosition(_targetSize, backgroundShape.getGlobalBounds());

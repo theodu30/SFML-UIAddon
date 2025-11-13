@@ -951,7 +951,7 @@ namespace sfui
 		case AlignProperty::AlignItems::Center:
 			return (_parentSize - _elementSize) / 2.f;
 		case AlignProperty::AlignItems::Stretch:
-			return 0.f; // Stretch is handled differently, so return 0 offset
+			return 0.f;
 		default:
 			return 0.f;
 		}

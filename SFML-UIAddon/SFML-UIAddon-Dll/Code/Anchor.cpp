@@ -29,11 +29,9 @@ namespace sfui
 	{
 		static sf::Vector2f result;
 
-		// Initial Position
 		int posX = 0;
 		int posY = 0;
 
-		// Horizontal Alignment
 		switch (_alignment.m_alignX)
 		{
 		case HorizontalAlignment::Left:
@@ -47,7 +45,6 @@ namespace sfui
 			break;
 		}
 
-		// Vertical Alignment
 		switch (_alignment.m_alignY)
 		{
 		case VerticalAlignment::Upper:
@@ -61,7 +58,6 @@ namespace sfui
 			break;
 		}
 
-		// Apply Offset
 		posX += _offset.x;
 		posY += _offset.y;
 		result.x = static_cast<float>(posX);

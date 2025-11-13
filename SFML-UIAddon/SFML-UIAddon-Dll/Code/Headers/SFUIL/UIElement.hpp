@@ -11,18 +11,14 @@
 
 namespace sfui
 {
-	// Forward declaration of UIElement
 	class UIElement;
 
-	// Template concept to ensure T is derived from UIElement
 	template<typename T>
 	concept UIElementSubClass = std::derived_from<T, UIElement>;
 
-	// Template concept to ensure T is derived from Property
 	template<typename T>
 	concept UIElementProperty = std::derived_from<T, Property>;
 
-	// Helper type trait for static_assert false
 	template<typename T>
 	struct always_false : std::false_type {};
 
@@ -246,13 +242,13 @@ namespace sfui
 		}
 
 	protected:
-		const char* m_name = "UIElement"; // Name of the UI Element
-		std::vector<UIElement*> m_children; // Child UI Elements
-		UIElement* m_parent = nullptr; // Parent UI Element
-		bool m_dirty = true; // Flag indicating if the element needs to be re-rendered
+		const char* m_name = "UIElement";
+		std::vector<UIElement*> m_children;
+		UIElement* m_parent = nullptr;
+		bool m_dirty = true;
 
-		sf::Vector2f m_renderSize; // Size used during the last render
-		sf::Vector2f m_renderPosition; // Position used during the last render
+		sf::Vector2f m_renderSize;
+		sf::Vector2f m_renderPosition;
 
 		OpacityProperty m_opacity;
 		DisplayProperty m_display;
@@ -266,49 +262,18 @@ namespace sfui
 		BorderProperty m_border;
 		TransformProperty m_transform;
 
-		/// <summary>
-		/// <paragraph>Marks the UI Element as dirty, indicating it needs to be re-rendered.</paragraph>
-		/// <paragraph>Also propagates the dirty flag to the parent element if it exists.</paragraph>
-		/// </summary>
 		void markDirty();
 
-		/// <summary>
-		/// <paragraph>Re-renders the UI Element texture if it is marked as dirty.</paragraph>
-		/// </summary>
-		/// <param name="_texture">The RenderTexture assigned for layout calculations.</param>
 		virtual void reRenderIfDirty(sf::RenderTexture& _texture) = 0;
 
-		/// <summary>
-		/// <paragraph>Computes the position of the UI Element based on its properties and the given bounds.</paragraph>
-		/// </summary>
-		/// <param name="_target"></param>
-		/// <param name="_sprite"></param>
 		void computePosition(const sf::Vector2f& _targetSize, const sf::FloatRect& _bounds);
 
-		/// <summary>
-		/// <paragraph>Applies transformation properties to the given sprite before drawing.</paragraph>
-		/// </summary>
-		/// <param name="_target"></param>
-		/// <param name="_sprite"></param>
 		void applyTransformations(const sf::Vector2f& _targetSize, sf::Sprite& _sprite);
 
-		/// <summary>
-		/// <paragraph>Applies transformation properties to the given rectangle shape before drawing.</paragraph>
-		/// </summary>
-		/// <param name="_target"></param>
-		/// <param name="_sprite"></param>
 		void applyTransformations(const sf::Vector2f& _targetSize, sf::Shape& _shape);
 
-		/// <summary>
-		/// <paragraph>Draws the background of the UI Element based on its background properties.</paragraph>
-		/// </summary>
-		/// <param name="_target"></param>
-		/// <param name="_targetSize"></param>
 		void drawBackground(sf::RenderTexture& _target, const sf::Vector2f& _targetSize);
 
-		/// <summary>
-		/// <paragraph>Initializes the UI Element. To be called during construction.</paragraph>
-		/// </summary>
 		virtual void Initialize() {};
 	};
 }

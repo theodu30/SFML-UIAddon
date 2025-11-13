@@ -14,7 +14,7 @@ namespace sfui
 		[[nodiscard]] const float& getOpacity() const;
 		void setOpacity(float _opacity);
 	private:
-		float m_opacity = 1.f; // Opacity value between 0.0f (transparent) and 1.0f (opaque)
+		float m_opacity = 1.f;
 	};
 
 	class SFUIL_API DisplayProperty : public Property
@@ -29,7 +29,7 @@ namespace sfui
 		[[nodiscard]] Type getDisplay() const;
 		void setDisplay(Type _type);
 	private:
-		Type m_display = Type::Flex; // The display type
+		Type m_display = Type::Flex;
 	};
 
 	class SFUIL_API VisibilityProperty : public Property
@@ -44,7 +44,7 @@ namespace sfui
 		void setVisibility(Type _type);
 
 	private:
-		Type m_visibility = Type::Visible; // The visibility type
+		Type m_visibility = Type::Visible;
 	};
 
 	class SFUIL_API PositionProperty : public Property
@@ -68,8 +68,8 @@ namespace sfui
 
 		struct Value
 		{
-			float value = 0.f; // The value for the position
-			ValueType type = ValueType::Auto; // The type of the value
+			float value = 0.f;
+			ValueType type = ValueType::Auto;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -95,7 +95,7 @@ namespace sfui
 		void setLeft(float _value);
 
 	private:
-		Mode m_mode = Mode::Relative; // The position mode
+		Mode m_mode = Mode::Relative;
 		Value m_top;
 		Value m_right;
 		Value m_bottom;
@@ -114,8 +114,8 @@ namespace sfui
 
 		struct Basic
 		{
-			float value = 0.f; // The value for the flex basis
-			BasicType type = BasicType::Auto; // The type of the value
+			float value = 0.f;
+			BasicType type = BasicType::Auto;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -231,8 +231,8 @@ namespace sfui
 
 		struct SizeValue
 		{
-			float value = 0.f; // The value for the width or height
-			SizeType type = SizeType::Auto; // The type of the value
+			float value = 0.f;
+			SizeType type = SizeType::Auto;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -259,8 +259,8 @@ namespace sfui
 
 		struct MinSizeValue
 		{
-			float value = 0.f; // The value for the width or height
-			MinSizeType type = MinSizeType::Auto; // The type of the value
+			float value = 0.f;
+			MinSizeType type = MinSizeType::Auto;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -287,8 +287,8 @@ namespace sfui
 
 		struct MaxSizeValue
 		{
-			float value = 0.f; // The value for the width or height
-			MaxSizeType type = MaxSizeType::None; // The type of the value
+			float value = 0.f;
+			MaxSizeType type = MaxSizeType::None;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -324,8 +324,8 @@ namespace sfui
 
 		struct MarginValue
 		{
-			float value = 0.f; // The value for the margin
-			MarginType type = MarginType::Pixels; // The type of the value
+			float value = 0.f;
+			MarginType type = MarginType::Pixels;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -359,8 +359,8 @@ namespace sfui
 
 		struct PaddingValue
 		{
-			float value = 0.f; // The value for the padding
-			PaddingType type = PaddingType::Pixels; // The type of the value
+			float value = 0.f;
+			PaddingType type = PaddingType::Pixels;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -404,7 +404,7 @@ namespace sfui
 		void setColor(std::uint8_t _r, std::uint8_t _g, std::uint8_t _b, std::uint8_t _a = 255);
 
 	private:
-		sf::Color m_color = sf::Color::Transparent; // The background color
+		sf::Color m_color = sf::Color::Transparent;
 	};
 
 	class SFUIL_API BorderProperty : public Property
@@ -421,9 +421,9 @@ namespace sfui
 		void setRadius(float _radius);
 
 	private:
-		sf::Color m_color = sf::Color::Black; // The color of the border
-		float m_width = 0.f; // The value for the border width
-		float m_radius = 0.f; // The value for the border radius
+		sf::Color m_color = sf::Color::Black;
+		float m_width = 0.f;
+		float m_radius = 0.f;
 	};
 
 	class SFUIL_API TransformProperty : public Property
@@ -437,8 +437,8 @@ namespace sfui
 
 		struct OriginValue
 		{
-			float value = 0.f; // The value for the transform origin
-			OriginType type = OriginType::Pixels; // The type of the value
+			float value = 0.f;
+			OriginType type = OriginType::Pixels;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -464,8 +464,8 @@ namespace sfui
 
 		struct TranslateValue
 		{
-			float value = 0.f; // The value for the transform translate
-			TranslateType type = TranslateType::Pixels; // The type of the value
+			float value = 0.f;
+			TranslateType type = TranslateType::Pixels;
 
 			float resolveToPixels(float _relativeTo) const;
 		};
@@ -485,8 +485,8 @@ namespace sfui
 
 		struct Scale
 		{
-			float x = 1.f; // The value for the transform scale X
-			float y = 1.f; // The value for the transform scale Y
+			float x = 1.f;
+			float y = 1.f;
 		};
 
 		[[nodiscard]] const Scale& getScale() const;;
@@ -502,8 +502,8 @@ namespace sfui
 
 		struct Rotate
 		{
-			float value = 0.f; // The value for the transform rotate
-			RotateType type = RotateType::Degrees; // The type of the value
+			float value = 0.f;
+			RotateType type = RotateType::Degrees;
 
 			float resolveToDegrees() const;
 			float resolveToRadians() const;

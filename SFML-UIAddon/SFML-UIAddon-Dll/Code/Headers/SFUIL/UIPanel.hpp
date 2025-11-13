@@ -8,8 +8,6 @@
 
 namespace sfui
 {
-	// Forward declaration
-
 	class UIVisualContainer;
 
 	class SFUIL_API UIPanel
