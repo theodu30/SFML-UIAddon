@@ -13,14 +13,15 @@ namespace sfui
 		m_renderTexture = sf::RenderTexture(m_size);
 
 		m_rootElement = new UIVisualContainer("__ROOT_ELEMENT__");
-		m_rootElement->getPositionProperty().mode = PositionModeProperty::Absolute;
-		SizeProperty& rootSize = m_rootElement->getSizeProperty();
-		rootSize.size.width = SizeValueProperty{ .value = 100.f, .type = SizeValueTypeProperty::Percentage };
-		rootSize.size.height = SizeValueProperty{ .value = 100.f, .type = SizeValueTypeProperty::Percentage };
+		m_rootElement->getProperty<PositionProperty>().setMode(PositionProperty::Mode::Absolute);
+		SizeProperty& rootSize = m_rootElement->getProperty<SizeProperty>();
+		rootSize.setWidth(100.f, SizeProperty::SizeType::Percentage);
+		rootSize.setHeight(100.f, SizeProperty::SizeType::Percentage);
 	}
 
 	UIPanel::~UIPanel()
 	{
+		delete m_rootElement;
 	}
 
 	void UIPanel::render()

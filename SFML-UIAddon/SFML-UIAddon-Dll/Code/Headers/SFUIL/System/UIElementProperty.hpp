@@ -6,539 +6,545 @@
 
 namespace sfui
 {
-	struct SFUIL_API OpacityProperty
+	class SFUIL_API Property {};
+
+	class SFUIL_API OpacityProperty : public Property
 	{
-		float value = 1.f; // Opacity value between 0.0f (transparent) and 1.0f (opaque)
+	public:
+		[[nodiscard]] const float& getOpacity() const;
+		void setOpacity(float _opacity);
+	private:
+		float m_opacity = 1.f; // Opacity value between 0.0f (transparent) and 1.0f (opaque)
 	};
 
-	enum class SFUIL_API DisplayValueTypeProperty : char
+	class SFUIL_API DisplayProperty : public Property
 	{
-		Flex,
-		None
+	public:
+		enum class Type : char
+		{
+			Flex,
+			None
+		};
+
+		[[nodiscard]] Type getDisplay() const;
+		void setDisplay(Type _type);
+	private:
+		Type m_display = Type::Flex; // The display type
 	};
 
-	struct SFUIL_API DisplayProperty
+	class SFUIL_API VisibilityProperty : public Property
 	{
-		DisplayValueTypeProperty type = DisplayValueTypeProperty::Flex; // The display type
+	public:
+		enum class Type : char
+		{
+			Visible,
+			Hidden
+		};
+		[[nodiscard]] Type getVisibility() const;
+		void setVisibility(Type _type);
+
+	private:
+		Type m_visibility = Type::Visible; // The visibility type
 	};
 
-	enum class SFUIL_API VisibilityValueTypeProperty : char
+	class SFUIL_API PositionProperty : public Property
 	{
-		Visible,
-		Hidden
+	public:
+		enum class Mode : char
+		{
+			Relative,
+			Absolute
+		};
+
+		[[nodiscard]] Mode getMode() const;
+		void setMode(Mode _mode);
+
+		enum class ValueType : char
+		{
+			Auto,
+			Pixels,
+			Percentage
+		};
+
+		struct Value
+		{
+			float value = 0.f; // The value for the position
+			ValueType type = ValueType::Auto; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		[[nodiscard]] const Value& getTop() const;
+		void setTop(const Value& _value);
+		void setTop(float _value, ValueType _type);
+		void setTop(float _value);
+
+		[[nodiscard]] const Value& getRight() const;
+		void setRight(const Value& _value);
+		void setRight(float _value, ValueType _type);
+		void setRight(float _value);
+
+		[[nodiscard]] const Value& getBottom() const;
+		void setBottom(const Value& _value);
+		void setBottom(float _value, ValueType _type);
+		void setBottom(float _value);
+
+		[[nodiscard]] const Value& getLeft() const;
+		void setLeft(const Value& _value);
+		void setLeft(float _value, ValueType _type);
+		void setLeft(float _value);
+
+	private:
+		Mode m_mode = Mode::Relative; // The position mode
+		Value m_top;
+		Value m_right;
+		Value m_bottom;
+		Value m_left;
 	};
 
-	struct SFUIL_API VisibilityProperty
+	class SFUIL_API FlexProperty : public Property
 	{
-		VisibilityValueTypeProperty type = VisibilityValueTypeProperty::Visible; // The visibility type
+	public:
+		enum class BasicType : char
+		{
+			Auto,
+			Pixels,
+			Percentage
+		};
+
+		struct Basic
+		{
+			float value = 0.f; // The value for the flex basis
+			BasicType type = BasicType::Auto; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		[[nodiscard]] const Basic& getFlexBasic() const;
+		void setFlexBasic(const Basic& _value);
+		void setFlexBasic(float _value, BasicType _type);
+		void setFlexBasic(float _value);
+
+		[[nodiscard]] const float& getFlexShrink() const;
+		void setFlexShrink(float _value);
+
+		[[nodiscard]] const float& getFlexGrow() const;
+		void setFlexGrow(float _value);
+
+		enum class Direction : char
+		{
+			Column,
+			ColumnReverse,
+			Row,
+			RowReverse
+		};
+
+		[[nodiscard]] Direction getFlexDirection() const;
+		void setFlexDirection(Direction _direction);
+
+		enum class Warp : char
+		{
+			NoWrap,
+			Wrap,
+			WrapReverse
+		};
+
+		[[nodiscard]] Warp getFlexWrap() const;
+		void setFlexWrap(Warp _warp);
+
+	private:
+		Basic m_flexBasis;
+		float m_flexShrink = 1.f;
+		float m_flexGrow = 1.f;
+		Direction m_flexDirection = Direction::Column;
+		Warp m_flexWrap = Warp::NoWrap;
 	};
 
-	enum class SFUIL_API PositionModeProperty : char
+	class SFUIL_API AlignProperty : public Property
 	{
-		Relative,
-		Absolute
+	public:
+		enum class AlignItems : char
+		{
+			Auto,
+			FlexStart,
+			Center,
+			FlexEnd,
+			Stretch
+		};
+
+		[[nodiscard]] AlignItems getAlignItems() const;
+		void setAlignItems(AlignItems _alignItems);
+
+		enum class JustifyContent : char
+		{
+			FlexStart,
+			Center,
+			FlexEnd,
+			SpaceBetween,
+			SpaceAround,
+			SpaceEvenly
+		};
+
+		[[nodiscard]] JustifyContent getJustifyContent() const;
+		void setJustifyContent(JustifyContent _justifyContent);
+
+		enum class AlignSelf : char
+		{
+			Auto,
+			FlexStart,
+			Center,
+			FlexEnd,
+			Stretch
+		};
+
+		[[nodiscard]] AlignSelf getAlignSelf() const;
+		void setAlignSelf(AlignSelf _alignSelf);
+
+		enum class AlignContent : char
+		{
+			Auto,
+			FlexStart,
+			Center,
+			FlexEnd,
+			Stretch
+		};
+
+		[[nodiscard]] AlignContent getAlignContent() const;
+		void setAlignContent(AlignContent _alignContent);
+
+	private:
+		AlignItems m_alignItems = AlignItems::Stretch;
+		JustifyContent m_justifyContent = JustifyContent::FlexStart;
+		AlignSelf m_alignSelf = AlignSelf::Auto;
+		AlignContent m_alignContent = AlignContent::FlexStart;
 	};
 
-	enum class SFUIL_API PositionValueTypeProperty : char
+	class SFUIL_API SizeProperty : public Property
 	{
-		Auto,
-		Pixels,
-		Percentage
+	public:
+		enum class SizeType : char
+		{
+			Auto,
+			Pixels,
+			Percentage
+		};
+
+		struct SizeValue
+		{
+			float value = 0.f; // The value for the width or height
+			SizeType type = SizeType::Auto; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		struct Size
+		{
+			SizeValue width;
+			SizeValue height;
+		};
+
+		[[nodiscard]] const Size& getSize() const;
+		void setSize(const Size& _size);
+		void setWidth(float _value, SizeType _type);
+		void setWidth(float _value);
+		void setHeight(float _value, SizeType _type);
+		void setHeight(float _value);
+
+		enum class MinSizeType : char
+		{
+			Auto,
+			Pixels,
+			Percentage
+		};
+
+		struct MinSizeValue
+		{
+			float value = 0.f; // The value for the width or height
+			MinSizeType type = MinSizeType::Auto; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		struct MinSize
+		{
+			MinSizeValue width;
+			MinSizeValue height;
+		};
+
+		[[nodiscard]] const MinSize& getMinSize() const;
+		void setMinSize(const MinSize& _minSize);
+		void setMinWidth(float _value, MinSizeType _type);
+		void setMinWidth(float _value);
+		void setMinHeight(float _value, MinSizeType _type);
+		void setMinHeight(float _value);
+
+		enum class MaxSizeType : char
+		{
+			None,
+			Pixels,
+			Percentage
+		};
+
+		struct MaxSizeValue
+		{
+			float value = 0.f; // The value for the width or height
+			MaxSizeType type = MaxSizeType::None; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		struct MaxSize
+		{
+			MaxSizeValue width;
+			MaxSizeValue height;
+		};
+
+		[[nodiscard]] const MaxSize& getMaxSize() const;
+		void setMaxSize(const MaxSize& _maxSize);
+		void setMaxWidth(float _value, MaxSizeType _type);
+		void setMaxWidth(float _value);
+		void setMaxHeight(float _value, MaxSizeType _type);
+		void setMaxHeight(float _value);
+
+	private:
+		Size m_size;
+		MinSize m_minSize;
+		MaxSize m_maxSize;
 	};
 
-	struct SFUIL_API PositionValueProperty
+	class SFUIL_API SpacingProperty : public Property
 	{
-		float value = 0.f; // The value for the position
-		PositionValueTypeProperty type = PositionValueTypeProperty::Pixels; // The type of the value
+	public:
+		enum class MarginType : char
+		{
+			Auto,
+			Pixels,
+			Percentage
+		};
+
+		struct MarginValue
+		{
+			float value = 0.f; // The value for the margin
+			MarginType type = MarginType::Pixels; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		[[nodiscard]] const MarginValue& getMarginTop() const;
+		void setMarginTop(const MarginValue& _value);
+		void setMarginTop(float _value, MarginType _type);
+		void setMarginTop(float _value);
+
+		[[nodiscard]] const MarginValue& getMarginRight() const;
+		void setMarginRight(const MarginValue& _value);
+		void setMarginRight(float _value, MarginType _type);
+		void setMarginRight(float _value);
+
+		[[nodiscard]] const MarginValue& getMarginBottom() const;
+		void setMarginBottom(const MarginValue& _value);
+		void setMarginBottom(float _value, MarginType _type);
+		void setMarginBottom(float _value);
+
+		[[nodiscard]] const MarginValue& getMarginLeft() const;
+		void setMarginLeft(const MarginValue& _value);
+		void setMarginLeft(float _value, MarginType _type);
+		void setMarginLeft(float _value);
+
+		enum class PaddingType : char
+		{
+			Auto,
+			Pixels,
+			Percentage
+		};
+
+		struct PaddingValue
+		{
+			float value = 0.f; // The value for the padding
+			PaddingType type = PaddingType::Pixels; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		[[nodiscard]] const PaddingValue& getPaddingTop() const;
+		void setPaddingTop(const PaddingValue& _value);
+		void setPaddingTop(float _value, PaddingType _type);
+		void setPaddingTop(float _value);
+
+		[[nodiscard]] const PaddingValue& getPaddingRight() const;
+		void setPaddingRight(const PaddingValue& _value);
+		void setPaddingRight(float _value, PaddingType _type);
+		void setPaddingRight(float _value);
+
+		[[nodiscard]] const PaddingValue& getPaddingBottom() const;
+		void setPaddingBottom(const PaddingValue& _value);
+		void setPaddingBottom(float _value, PaddingType _type);
+		void setPaddingBottom(float _value);
+
+		[[nodiscard]] const PaddingValue& getPaddingLeft() const;
+		void setPaddingLeft(const PaddingValue& _value);
+		void setPaddingLeft(float _value, PaddingType _type);
+		void setPaddingLeft(float _value);
+
+	private:
+		MarginValue m_marginTop;
+		MarginValue m_marginRight;
+		MarginValue m_marginBottom;
+		MarginValue m_marginLeft;
+		PaddingValue m_paddingTop;
+		PaddingValue m_paddingRight;
+		PaddingValue m_paddingBottom;
+		PaddingValue m_paddingLeft;
 	};
 
-	struct SFUIL_API PositionProperty
+	class SFUIL_API BackgroundProperty : public Property
 	{
-		PositionModeProperty mode = PositionModeProperty::Relative; // The position mode
-		PositionValueProperty top;
-		PositionValueProperty right;
-		PositionValueProperty bottom;
-		PositionValueProperty left;
+	public:
+		[[nodiscard]] const sf::Color& getColor() const;
+		void setColor(const sf::Color& _color);
+		void setColor(std::uint8_t _r, std::uint8_t _g, std::uint8_t _b, std::uint8_t _a = 255);
+
+	private:
+		sf::Color m_color = sf::Color::Transparent; // The background color
 	};
 
-	enum class SFUIL_API FlexBasicValueTypeProperty
+	class SFUIL_API BorderProperty : public Property
 	{
-		Auto,
-		Pixels,
-		Percentage
+	public:
+		[[nodiscard]] const sf::Color& getColor() const;
+		void setColor(const sf::Color& _color);
+		void setColor(std::uint8_t _r, std::uint8_t _g, std::uint8_t _b, std::uint8_t _a = 255);
+
+		[[nodiscard]] const float& getWidth() const;
+		void setWidth(float _width);
+
+		[[nodiscard]] const float& getRadius() const;
+		void setRadius(float _radius);
+
+	private:
+		sf::Color m_color = sf::Color::Black; // The color of the border
+		float m_width = 0.f; // The value for the border width
+		float m_radius = 0.f; // The value for the border radius
 	};
 
-	struct SFUIL_API FlexBasicValueProperty
+	class SFUIL_API TransformProperty : public Property
 	{
-		float value = 0.f; // The value for the flex basis
-		FlexBasicValueTypeProperty type = FlexBasicValueTypeProperty::Auto; // The type of the value
+	public:
+		enum class OriginType : char
+		{
+			Pixels,
+			Percentage
+		};
+
+		struct OriginValue
+		{
+			float value = 0.f; // The value for the transform origin
+			OriginType type = OriginType::Pixels; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		struct Origin
+		{
+			OriginValue x;
+			OriginValue y;
+		};
+
+		[[nodiscard]] const Origin& getOrigin() const;
+		void setOrigin(const Origin& _origin);
+		void setOriginX(float _value, OriginType _type);
+		void setOriginX(float _value);
+		void setOriginY(float _value, OriginType _type);
+		void setOriginY(float _value);
+
+		enum class TranslateType : char
+		{
+			Pixels,
+			Percentage
+		};
+
+		struct TranslateValue
+		{
+			float value = 0.f; // The value for the transform translate
+			TranslateType type = TranslateType::Pixels; // The type of the value
+
+			float resolveToPixels(float _relativeTo) const;
+		};
+
+		struct Translate
+		{
+			TranslateValue x;
+			TranslateValue y;
+		};
+
+		[[nodiscard]] const Translate& getTranslate() const;
+		void setTranslate(const Translate& _translate);
+		void setTranslateX(float _value, TranslateType _type);
+		void setTranslateX(float _value);
+		void setTranslateY(float _value, TranslateType _type);
+		void setTranslateY(float _value);
+
+		struct Scale
+		{
+			float x = 1.f; // The value for the transform scale X
+			float y = 1.f; // The value for the transform scale Y
+		};
+
+		[[nodiscard]] const Scale& getScale() const;;
+		void setScale(const Scale& _scale);
+		void setScaleX(float _value);
+		void setScaleY(float _value);
+
+		enum class RotateType : char
+		{
+			Degrees,
+			Radians
+		};
+
+		struct Rotate
+		{
+			float value = 0.f; // The value for the transform rotate
+			RotateType type = RotateType::Degrees; // The type of the value
+
+			float resolveToDegrees() const;
+			float resolveToRadians() const;
+			sf::Angle resolveToSfAngle() const;
+		};
+
+		[[nodiscard]] const Rotate& getRotate() const;
+		void setRotate(const Rotate& _rotate);
+		void setRotate(float _value, RotateType _type);
+		void setRotate(float _value);
+
+	private:
+		Origin m_origin;
+		Translate m_translate;
+		Scale m_scale;
+		Rotate m_rotate;
 	};
 
-	struct SFUIL_API FlexShrinkProperty
-	{
-		float value = 1.f; // The flex shrink factor
-	};
-
-	struct SFUIL_API FlexGrowProperty
-	{
-		float value = 1.f; // The flex grow factor
-	};
-
-	enum class SFUIL_API FlexDirectionProperty : char
-	{
-		Column,
-		ColumnReverse,
-		Row,
-		RowReverse
-	};
-
-	enum class SFUIL_API FlexWarpProperty : char
-	{
-		NoWrap,
-		Wrap,
-		WrapReverse
-	};
-
-	struct SFUIL_API FlexProperty
-	{
-		FlexBasicValueProperty flexBasis;
-		FlexShrinkProperty flexShrink;
-		FlexGrowProperty flexGrow;
-		FlexDirectionProperty flexDirection = FlexDirectionProperty::Column;
-		FlexWarpProperty flexWrap = FlexWarpProperty::NoWrap;
-	};
-
-	enum class SFUIL_API AlignItemsProperty : char
-	{
-		Auto,
-		FlexStart,
-		Center,
-		FlexEnd,
-		Stretch
-	};
-
-	enum class SFUIL_API JustifyContentProperty : char
-	{
-		FlexStart,
-		Center,
-		FlexEnd,
-		SpaceBetween,
-		SpaceAround,
-		SpaceEvenly
-	};
-
-	enum class SFUIL_API AlignSelfProperty : char
-	{
-		Auto,
-		FlexStart,
-		Center,
-		FlexEnd,
-		Stretch
-	};
-
-	enum class SFUIL_API AlignContentProperty : char
-	{
-		Auto,
-		FlexStart,
-		Center,
-		FlexEnd,
-		Stretch
-	};
-
-	struct SFUIL_API AlignProperty
-	{
-		AlignItemsProperty alignItems = AlignItemsProperty::Stretch;
-		JustifyContentProperty justifyContent = JustifyContentProperty::FlexStart;
-		AlignSelfProperty alignSelf = AlignSelfProperty::Auto;
-		AlignContentProperty alignContent = AlignContentProperty::FlexStart;
-	};
-
-	enum class SFUIL_API SizeValueTypeProperty : char
-	{
-		Auto,
-		Pixels,
-		Percentage
-	};
-
-	enum class SFUIL_API MinSizeValueTypeProperty : char
-	{
-		Auto,
-		Pixels,
-		Percentage
-	};
-
-	enum class SFUIL_API MaxSizeValueTypeProperty : char
-	{
-		None,
-		Pixels,
-		Percentage
-	};
-
-	struct SFUIL_API SizeValueProperty
-	{
-		float value = 0.f; // The value for the width or height
-		SizeValueTypeProperty type = SizeValueTypeProperty::Auto; // The type of the value
-	};
-
-	struct SFUIL_API MinSizeValueProperty
-	{
-		float value = 0.f; // The value for the width or height
-		MinSizeValueTypeProperty type = MinSizeValueTypeProperty::Auto; // The type of the value
-	};
-
-	struct SFUIL_API MaxSizeValueProperty
-	{
-		float value = 0.f; // The value for the width or height
-		MaxSizeValueTypeProperty type = MaxSizeValueTypeProperty::None; // The type of the value
-	};
-
-	struct SFUIL_API SizeVectorProperty
-	{
-		SizeValueProperty width;
-		SizeValueProperty height;
-	};
-
-	struct SFUIL_API MinSizeVectorProperty
-	{
-		MinSizeValueProperty width;
-		MinSizeValueProperty height;
-	};
-
-	struct SFUIL_API MaxSizeVectorProperty
-	{
-		MaxSizeValueProperty width;
-		MaxSizeValueProperty height;
-	};
-
-	struct SFUIL_API SizeProperty
-	{
-		SizeVectorProperty size;
-		MinSizeVectorProperty minSize;
-		MaxSizeVectorProperty maxSize;
-	};
-
-	enum class SFUIL_API MarginValueTypeProperty : char
-	{
-		Auto,
-		Pixels,
-		Percentage
-	};
-
-	struct SFUIL_API MarginValueProperty
-	{
-		float value = 0.f; // The value for the margin
-		MarginValueTypeProperty type = MarginValueTypeProperty::Pixels; // The type of the value
-	};
-
-	struct SFUIL_API MarginProperty
-	{
-		MarginValueProperty top;
-		MarginValueProperty right;
-		MarginValueProperty bottom;
-		MarginValueProperty left;
-	};
-
-	enum class SFUIL_API PaddingValueTypeProperty : char
-	{
-		Auto,
-		Pixels,
-		Percentage
-	};
-
-	struct SFUIL_API PaddingValueProperty
-	{
-		float value = 0.f; // The value for the padding
-		PaddingValueTypeProperty type = PaddingValueTypeProperty::Pixels; // The type of the value
-	};
-
-	struct SFUIL_API PaddingProperty
-	{
-		PaddingValueProperty top;
-		PaddingValueProperty right;
-		PaddingValueProperty bottom;
-		PaddingValueProperty left;
-	};
-
-	struct SFUIL_API SpacingProperty
-	{
-		MarginProperty margin;
-		PaddingProperty padding;
-	};
-
-	struct SFUIL_API BackgroundProperty
-	{
-		sf::Color color = sf::Color::Transparent; // The background color
-	};
-
-	struct SFUIL_API BorderColorValueProperty
-	{
-		sf::Color color = sf::Color::Black; // The color of the border
-	};
-
-	struct SFUIL_API BorderWidthValueProperty
-	{
-		float value = 0.f; // The value for the border width
-	};
-
-	struct SFUIL_API BorderRadiusValueProperty
-	{
-		float value = 0.f; // The value for the border radius
-	};
-
-	struct SFUIL_API BorderProperty
-	{
-		BorderColorValueProperty color;
-		BorderWidthValueProperty width;
-		BorderRadiusValueProperty radius;
-	};
-
-	enum class SFUIL_API TransformOriginValueTypeProperty : char
-	{
-		Pixels,
-		Percentage
-	};
-
-	struct SFUIL_API TransformOriginValueProperty
-	{
-		float value = 0.f; // The value for the transform origin
-		TransformOriginValueTypeProperty type = TransformOriginValueTypeProperty::Pixels; // The type of the value
-	};
-
-	struct SFUIL_API TransformOriginProperty
-	{
-		TransformOriginValueProperty x;
-		TransformOriginValueProperty y;
-	};
-
-	enum class SFUIL_API TransformTranslateValueTypeProperty : char
-	{
-		Pixels,
-		Percentage
-	};
-
-	struct SFUIL_API TransformTranslateValueProperty
-	{
-		float value = 0.f; // The value for the transform translate
-		TransformTranslateValueTypeProperty type = TransformTranslateValueTypeProperty::Pixels; // The type of the value
-	};
-
-	struct SFUIL_API TransformTranslateProperty
-	{
-		TransformTranslateValueProperty x;
-		TransformTranslateValueProperty y;
-	};
-
-	struct SFUIL_API TransformScaleValueProperty
-	{
-		float value = 1.f; // The value for the transform scale
-	};
-
-	struct SFUIL_API TransformScaleProperty
-	{
-		TransformScaleValueProperty x;
-		TransformScaleValueProperty y;
-	};
-
-	enum class SFUIL_API TransformRotateValueTypeProperty : char
-	{
-		Degrees,
-		Radians
-	};
-
-	struct SFUIL_API TransformRotateValueProperty
-	{
-		float value = 0.f; // The value for the transform rotate
-		TransformRotateValueTypeProperty type = TransformRotateValueTypeProperty::Degrees; // The type of the value
-	};
-
-	struct SFUIL_API TransformRotateProperty
-	{
-		TransformRotateValueProperty angle;
-	};
-
-	struct SFUIL_API TransformProperty
-	{
-		TransformOriginProperty origin;
-		TransformTranslateProperty translate;
-		TransformScaleProperty scale;
-		TransformRotateProperty rotate;
-	};
-
-	/// <summary>
-	/// <paragraph>Utility class that contains different utility functions for UI element properties.</paragraph>
-	/// </summary>
 	class SFUIL_API UIPropUtils
 	{
 	public:
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const PositionValueProperty& _prop, float _relativeTo);
+		static void normalizeAngle(TransformProperty& _prop);
 
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const SizeValueProperty& _prop, float _relativeTo);
+		static TransformProperty::Rotate normalizedAngle(const TransformProperty::Rotate& _rotate);
 
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const MinSizeValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const MaxSizeValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const MarginValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const PaddingValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const TransformOriginValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const TransformTranslateValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a property value to pixels based on its type and a relative reference value.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <param name="_relativeTo"></param>
-		/// <returns></returns>
-		static float resolveValueToPixels(const FlexBasicValueProperty& _prop, float _relativeTo);
-
-		/// <summary>
-		/// <paragraph>Resolves a rotation angle property to degrees based on its type.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <returns></returns>
-		static float resolveAngleToDegrees(const TransformRotateValueProperty& _prop);
-
-		/// <summary>
-		/// <paragraph>Resolves a rotation angle property to radians based on its type.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <returns></returns>
-		static float resolveAngleToRadians(const TransformRotateValueProperty& _prop);
-
-		/// <summary>
-		/// <paragraph>Resolves a rotation angle property to sf::Angle based on its type.</paragraph>
-		/// </summary>
-		/// <param name="_prop"></param>
-		/// <returns></returns>
-		static sf::Angle resolveAngleToSfAngle(const TransformRotateValueProperty& _prop);
-
-		/// <summary>
-		/// <paragraph>Checks the angle type and normalizes the angle value to be within valid range.</paragraph>
-		/// </summary>
-		static void normalizeAngle(TransformRotateValueProperty& _prop);
-
-		/// <summary>
-		/// <paragraph>Checks if the flex direction is of row or reverse row type.</paragraph>
-		/// </summary>
-		/// <param name="_flex"></param>
-		/// <returns></returns>
 		static bool isFlexDirectionRowType(const FlexProperty& _flex);
 
-		/// <summary>
-		/// <paragraph>Checks if the flex direction is of column orr reverse column type.</paragraph>
-		/// </summary>
-		/// <param name="_flex"></param>
-		/// <returns></returns>
 		static bool isFlexDirectionColumnType(const FlexProperty& _flex);
 
-		/// <summary>
-		/// <paragraph>Checks if the flex direction is of reverse row or reverse column type.</paragraph>
-		/// </summary>
-		/// <param name="_flex"></param>
-		/// <returns></returns>
 		static bool isFlexDirectionReverseType(const FlexProperty& _flex);
 
-		/// <summary>
-		/// <paragraph>Checks if the position mode is absolute.</paragraph>
-		/// </summary>
-		/// <param name="_position"></param>
-		/// <returns></returns>
 		static bool isPositionAbsolute(const PositionProperty& _position);
 
-		/// <summary>
-		/// <paragraph>Checks if the position mode is relative.</paragraph>
-		/// </summary>
-		/// <param name="_position"></param>
-		/// <returns></returns>
 		static bool isPositionRelative(const PositionProperty& _position);
 
-		/// <summary>
-		/// <paragraph>Clamps a float value between a minimum and maximum value.</paragraph>
-		/// </summary>
-		/// <param name="_value"></param>
-		/// <param name="_min"></param>
-		/// <param name="_max"></param>
-		/// <returns>Returns _min if _value less than _min, _max if _value more than _max, otherwise simply returns _value.</returns>
 		static float clampFloat(float _value, float _min, float _max);
 
-		/// <summary>
-		/// <paragraph>Clamps an unsigned int value between a minimum and maximum value.</paragraph>
-		/// </summary>
-		/// <param name="_value"></param>
-		/// <param name="_min"></param>
-		/// <param name="_max"></param>
-		/// <returns>>Returns _min if _value less than _min, _max if _value more than _max, otherwise simply returns _value.</returns>
 		static unsigned int clampUnsignedInt(unsigned int _value, unsigned int _min, unsigned int _max);
 
-		/// <summary>
-		/// <paragraph>Calculates the offset for an element based on JustifyContent property.</paragraph>
-		/// </summary>
-		/// <param name="_justifyContent"></param>
-		/// <param name="_siblingIndex"></param>
-		/// <param name="_siblingCount"></param>
-		/// <param name="_elementSize"></param>
-		/// <param name="_parentSize"></param>
-		/// <returns></returns>
-		static float calculateJustifyContentOffset(const JustifyContentProperty& _justifyContent, size_t _siblingIndex, size_t _siblingCount, float _elementSize, float _parentSize);
+		static float calculateJustifyContentOffset(const AlignProperty& _justifyContent, size_t _siblingIndex, size_t _siblingCount, float _elementSize, float _parentSize);
 
-		/// <summary>
-		/// <paragraph>Calculates the offset for an element based on AlignItems property.</paragraph>
-		/// </summary>
-		/// <param name="_alignItems"></param>
-		/// <param name="_elementSize"></param>
-		/// <param name="_parentSize"></param>
-		/// <returns></returns>
-		static float calculateAlignItemsOffset(const AlignItemsProperty& _alignItems, float _elementSize, float _parentSize);
+		static float calculateAlignItemsOffset(const AlignProperty& _alignItems, float _elementSize, float _parentSize);
 	};
 }

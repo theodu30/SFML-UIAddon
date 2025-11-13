@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Shape.hpp>
 #include <vector>
 #include <concepts>
+#include <type_traits>
 
 namespace sfui
 {
@@ -17,9 +18,14 @@ namespace sfui
 	template<typename T>
 	concept UIElementSubClass = std::derived_from<T, UIElement>;
 
-	/// <summary>
-	/// <paragraph>Base class for all UI Elements in the SFML-UIAddon library.</paragraph>
-	/// </summary>
+	// Template concept to ensure T is derived from Property
+	template<typename T>
+	concept UIElementProperty = std::derived_from<T, Property>;
+
+	// Helper type trait for static_assert false
+	template<typename T>
+	struct always_false : std::false_type {};
+
 	class SFUIL_API UIElement
 	{
 	public:
@@ -27,251 +33,146 @@ namespace sfui
 		UIElement(const char* _name) : m_name(_name) {}
 		virtual ~UIElement() = default;
 
-		/// <summary>
-		/// <paragraph>Draws the UI Element to the provided RenderTarget.</paragraph>
-		/// </summary>
-		/// <param name="_target">The RenderTarget to draw to.</param>
 		virtual void drawToTarget(sf::RenderTexture& _target) = 0;
 
-		/// <summary>
-		/// <paragraph>Getter for Spacing Property.</paragraph>
-		/// <paragraph>Allows access to margin and padding properties.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		SpacingProperty& getSpacingProperty();
+		template<UIElementProperty T>
+		T& getProperty()
+		{
+			markDirty();
 
-		/// <summary>
-		/// <paragraph>Const version: Getter for Spacing Property.</paragraph>
-		/// <paragraph>Allows access to margin and padding properties.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const SpacingProperty& getConstSpacingProperty() const;
+			if constexpr (std::is_same_v<T, OpacityProperty>)
+			{
+				return m_opacity;
+			}
+			else if constexpr (std::is_same_v<T, DisplayProperty>)
+			{
+				return m_display;
+			}
+			else if constexpr (std::is_same_v<T, VisibilityProperty>)
+			{
+				return m_visibility;
+			}
+			else if constexpr (std::is_same_v<T, PositionProperty>)
+			{
+				return m_position;
+			}
+			else if constexpr (std::is_same_v<T, FlexProperty>)
+			{
+				return m_flex;
+			}
+			else if constexpr (std::is_same_v<T, AlignProperty>)
+			{
+				return m_align;
+			}
+			else if constexpr (std::is_same_v<T, SizeProperty>)
+			{
+				return m_size;
+			}
+			else if constexpr (std::is_same_v<T, SpacingProperty>)
+			{
+				return m_spacing;
+			}
+			else if constexpr (std::is_same_v<T, BackgroundProperty>)
+			{
+				return m_background;
+			}
+			else if constexpr (std::is_same_v<T, BorderProperty>)
+			{
+				return m_border;
+			}
+			else if constexpr (std::is_same_v<T, TransformProperty>)
+			{
+				return m_transform;
+			}
+			else
+			{
+				static_assert(always_false<T>::value, "Unsupported UIElementProperty type");
+			}
+		}
 
-		/// <summary>
-		/// <paragraph>Getter for Border Property.</paragraph>
-		/// <paragraph>Allows access to border color, width, and radius properties.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		BorderProperty& getBorderProperty();
+		template<UIElementProperty T>
+		const T& getConstProperty() const
+		{
+			if constexpr (std::is_same_v<T, OpacityProperty>)
+			{
+				return m_opacity;
+			}
+			else if constexpr (std::is_same_v<T, DisplayProperty>)
+			{
+				return m_display;
+			}
+			else if constexpr (std::is_same_v<T, VisibilityProperty>)
+			{
+				return m_visibility;
+			}
+			else if constexpr (std::is_same_v<T, PositionProperty>)
+			{
+				return m_position;
+			}
+			else if constexpr (std::is_same_v<T, FlexProperty>)
+			{
+				return m_flex;
+			}
+			else if constexpr (std::is_same_v<T, AlignProperty>)
+			{
+				return m_align;
+			}
+			else if constexpr (std::is_same_v<T, SizeProperty>)
+			{
+				return m_size;
+			}
+			else if constexpr (std::is_same_v<T, SpacingProperty>)
+			{
+				return m_spacing;
+			}
+			else if constexpr (std::is_same_v<T, BackgroundProperty>)
+			{
+				return m_background;
+			}
+			else if constexpr (std::is_same_v<T, BorderProperty>)
+			{
+				return m_border;
+			}
+			else if constexpr (std::is_same_v<T, TransformProperty>)
+			{
+				return m_transform;
+			}
+			else
+			{
+				static_assert(always_false<T>::value, "Unsupported UIElementProperty type");
+			}
+		}
 
-		/// <summary>
-		/// <paragraph>Const version: Getter for Border Property.</paragraph>
-		/// <paragraph>Allows access to border color, width, and radius properties.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const BorderProperty& getConstBorderProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Transform Property.</paragraph>
-		/// <paragraph>Allows access to transform origin, translate, scale, and rotate properties.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		TransformProperty& getTransformProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Transform Property.</paragraph>
-		/// <paragraph>Allows access to transform origin, translate, scale, and rotate properties.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const TransformProperty& getConstTransformProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Size Property.</paragraph>
-		/// <paragraph>Allows access to width and height properties, including min and max constraints.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		SizeProperty& getSizeProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Size Property.</paragraph>
-		/// <paragraph>Allows access to width and height properties, including min and max constraints.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const SizeProperty& getConstSizeProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Position Property.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		PositionProperty& getPositionProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Position Property.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const PositionProperty& getConstPositionProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Background Property.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		BackgroundProperty& getBackgroundProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Background Property.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const BackgroundProperty& getConstBackgroundProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Flex Property.</paragraph>
-		/// <paragraph>Allows access to shrink, grow, direction, and wrap properties.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		FlexProperty& getFlexProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Flex Property.</paragraph>
-		/// <paragraph>Allows access to shrink, grow, direction, and wrap properties.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const FlexProperty& getConstFlexProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Align Property.</paragraph>
-		/// <paragraph>Allows access to align items, justify content, align self and align contents properties.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		AlignProperty& getAlignProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Align Property.</paragraph>
-		/// <paragraph>Allows access to align items, justify content, align self and align contents properties.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const AlignProperty& getConstAlignProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Opacity Property.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		OpacityProperty& getOpacityProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Opacity Property.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const OpacityProperty& getConstOpacityProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Visibility Property.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		VisibilityProperty& getVisibilityProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Visibility Property.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const VisibilityProperty& getConstVisibilityProperty() const;
-
-		/// <summary>
-		/// <paragraph>Getter for Display Property.</paragraph>
-		/// <paragraph>Assume modification and set dirty flag to true.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		DisplayProperty& getDisplayProperty();
-
-		/// <summary>
-		/// <paragraph>Const version: Getter for Display Property.</paragraph>
-		/// </summary>
-		/// <returns></returns>
-		const DisplayProperty& getConstDisplayProperty() const;
-
-		/// <summary>
-		/// <paragraph>Sets the name of the UI Element.</paragraph>
-		/// </summary>
-		/// <param name="_name">The name to set for the UI Element.</param>
 		void setName(const char* _name);
 
-		/// <summary>
-		/// <paragraph>Gets the name of the UI Element.</paragraph>
-		/// </summary>
-		/// <returns></returns>
 		const char* getName() const;
 
-		/// <summary>
-		/// <paragraph>Returns the number of child UI Elements.</paragraph>
-		/// </summary>
-		/// <returns></returns>
 		[[nodiscard]] size_t getChildCount() const noexcept;
 
-		/// <summary>
-		/// <paragraph>Adds a child UI Element to this element.</paragraph>
-		/// </summary>
-		/// <param name="_child">Pointer to the child UI Element to add.</param>
-		/// <returns>True if the child was added successfully, false otherwise.</returns>
 		bool addChild(UIElement* _child);
 
-		/// <summary>
-		/// <paragraph>Removes itself from its parent UI Element.</paragraph>
-		/// </summary>
-		/// <returns>True if successfully removed from parent, false otherwise.</returns>
 		bool removeFromParent();
 
-		/// <summary>
-		/// <paragraph>Removes itself and all its children from the UI hierarchy.</paragraph>
-		/// <paragraph>Destroys itself all child UI Elements recursively.</paragraph>
-		/// </summary>
-		/// <returns>Will always return true right after successful removal.</returns>
 		bool removeFromHierarchy();
 
-		/// <summary>
-		/// <paragraph>Gets a reference to the vector of child UI Elements.</paragraph>
-		/// </summary>
-		/// <returns></returns>
 		std::vector<UIElement*>& getChildren();
 
-		/// <summary>
-		/// <paragraph>Gets the render size of the UI Element after applying sizing and layout calculations.</paragraph>
-		/// </summary>
-		/// <returns></returns>
 		sf::Vector2f getRenderSize() const;
 
-		/// <summary>
-		/// <paragraph>Gets the render position of the UI Element after applying positioning and transformations.</paragraph>
-		/// </summary>
-		/// <returns></returns>
 		sf::Vector2f getRenderPosition() const;
 
-		/// <summary>
-		/// <paragraph>Cast the UI Element to a specific derived type from UIElement.</paragraph>
-		/// </summary>
-		/// <typeparam name="T">The target derived type to cast to.</typeparam>
-		/// <returns>Pointer to the casted type if successful, nullptr otherwise.</returns>
 		template<UIElementSubClass T>
 		T* as()
 		{
 			return dynamic_cast<T*>(this);
 		}
 
-		/// <summary>
-		/// <paragraph>Const version: Cast the UI Element to a specific derived type from UIElement.</paragraph>
-		/// </summary>
-		/// <typeparam name="T">The target derived type to cast to.</typeparam>
-		/// <returns>Pointer to the casted type if successful, nullptr otherwise.</returns>
 		template<UIElementSubClass T>
 		T* as() const
 		{
 			return dynamic_cast<T*>(this);
 		}
 
-		/// <summary>
-		/// <paragraph>Queries the UI Element hierarchy for a descendant of a specific derived type from UIElement.</paragraph>
-		/// <paragraph>Will return the first matching descendant found in a depth-first search manner.</paragraph>
-		/// </summary>
-		/// <typeparam name="T">The target derived type to search for.</typeparam>
-		/// <returns>Pointer to the found descendant if successful, nullptr otherwise.</returns>
 		template<UIElementSubClass T>
 		T* query()
 		{
@@ -289,13 +190,6 @@ namespace sfui
 			return nullptr;
 		}
 
-		/// <summary>
-		/// <paragraph>Queries the UI Element hierarchy for a descendant of a specific derived type from UIElement with a specific name.</paragraph>
-		/// <paragraph>Will return the first matching descendant found in a depth-first search manner.</paragraph>
-		/// </summary>
-		/// <typeparam name="T">The target derived type to search for.</typeparam>
-		/// <param name="_name">The name of the UI Element to search for.</param>
-		/// <returns>Pointer to the found descendant if successful, nullptr otherwise.</returns>
 		template <UIElementSubClass T>
 		T* query(const char* _name)
 		{
@@ -316,12 +210,6 @@ namespace sfui
 			return nullptr;
 		}
 
-		/// <summary>
-		/// <paragraph>Queries the UI Element hierarchy for all descendants of a specific derived type from UIElement.</paragraph>
-		/// <paragraph>Will return all matching descendants found in a depth-first search manner.</paragraph>
-		/// </summary>
-		/// <typeparam name="T">The target derived type to search for.</typeparam>
-		/// <returns>Vector of pointers to the found descendants.</returns>
 		template <UIElementSubClass T>
 		std::vector<T*> queryAll()
 		{
@@ -338,13 +226,6 @@ namespace sfui
 			return results;
 		}
 
-		/// <summary>
-		/// <paragraph>Queries the UI Element hierarchy for all descendants of a specific derived type from UIElement with a specific name.</paragraph>
-		/// <paragraph>Will return all matching descendants found in a depth-first search manner.</paragraph>
-		/// </summary>
-		/// <typeparam name="T">The target derived type to search for.</typeparam>
-		/// <param name="_name">The name of the UI Element to search for.</param>
-		/// <returns>Vector of pointers to the found descendants.</returns>
 		template <UIElementSubClass T>
 		std::vector<T*> queryAll(const char* _name)
 		{
@@ -373,17 +254,17 @@ namespace sfui
 		sf::Vector2f m_renderSize; // Size used during the last render
 		sf::Vector2f m_renderPosition; // Position used during the last render
 
-		SpacingProperty m_spacing;
-		BorderProperty m_border;
-		TransformProperty m_transform;
-		SizeProperty m_size;
+		OpacityProperty m_opacity;
+		DisplayProperty m_display;
+		VisibilityProperty m_visibility;
 		PositionProperty m_position;
-		BackgroundProperty m_background;
 		FlexProperty m_flex;
 		AlignProperty m_align;
-		OpacityProperty m_opacity;
-		VisibilityProperty m_visibility;
-		DisplayProperty m_display;
+		SizeProperty m_size;
+		SpacingProperty m_spacing;
+		BackgroundProperty m_background;
+		BorderProperty m_border;
+		TransformProperty m_transform;
 
 		/// <summary>
 		/// <paragraph>Marks the UI Element as dirty, indicating it needs to be re-rendered.</paragraph>

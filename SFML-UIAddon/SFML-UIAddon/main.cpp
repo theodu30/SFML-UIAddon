@@ -2,6 +2,7 @@
 #include <SFUIL/UIPanel.hpp>
 #include <SFUIL/Containers/UIVisualContainer.hpp>
 #include <SFUIL/Graphics/RoundedRectangle.hpp>
+#include <SFUIL/System/UIElementProperty.hpp>
 
 #include <iostream>
 
@@ -16,21 +17,21 @@ int main()
 	sfui::UIPanel panel;
 	panel.setActive(true);
 	panel.setSize(window.getSize());
-	panel.getRootElement()->getFlexProperty().flexDirection = sfui::FlexDirectionProperty::Column;
+	panel.getRootElement()->getProperty<sfui::FlexProperty>().setFlexDirection(sfui::FlexProperty::Direction::Column);
 	
 	sfui::UIVisualContainer* container1 = new sfui::UIVisualContainer("Container 1");
 	sfui::UIVisualContainer* container2 = new sfui::UIVisualContainer("Container 2");
 	sfui::UIVisualContainer* container3 = new sfui::UIVisualContainer("Container 3");
 	sfui::UIVisualContainer* container4 = new sfui::UIVisualContainer("Container 4");
-	container1->getBackgroundProperty().color = sf::Color(255, 0, 0, 127); // Semi-transparent red
-	container3->getBackgroundProperty().color = sf::Color(0, 0, 255, 127); // Semi-transparent blue
-	container4->getBackgroundProperty().color = sf::Color(0, 255, 0, 127); // Semi-transparent green
-	container2->getFlexProperty().flexDirection = sfui::FlexDirectionProperty::Row;
-	container1->getTransformProperty().origin.x = { .value = 50.f, .type = sfui::TransformOriginValueTypeProperty::Percentage };
-	container1->getTransformProperty().origin.y = { .value = 100.f, .type = sfui::TransformOriginValueTypeProperty::Percentage };
-	container1->getBorderProperty().radius.value = 20.f;
-	container1->getBorderProperty().width.value = 5.f;
-	container1->getBorderProperty().color.color = sf::Color(255, 0, 0, 191);
+	container1->getProperty<sfui::BackgroundProperty>().setColor(255ui8, 0ui8, 0ui8, 127ui8); // Semi-transparent red
+	container3->getProperty<sfui::BackgroundProperty>().setColor(0ui8, 0ui8, 255ui8, 127ui8); // Semi-transparent blue
+	container4->getProperty<sfui::BackgroundProperty>().setColor(0ui8, 255ui8, 0ui8, 127ui8); // Semi-transparent green
+	container2->getProperty<sfui::FlexProperty>().setFlexDirection(sfui::FlexProperty::Direction::Row);
+	container1->getProperty<sfui::TransformProperty>().setOriginX(50.f, sfui::TransformProperty::OriginType::Percentage);
+	container1->getProperty<sfui::TransformProperty>().setOriginY(100.f, sfui::TransformProperty::OriginType::Percentage);
+	container1->getProperty<sfui::BorderProperty>().setRadius(20.f);
+	container1->getProperty<sfui::BorderProperty>().setWidth(5.f);
+	container1->getProperty<sfui::BorderProperty>().setColor(255ui8, 0ui8, 0ui8, 191ui8);
 	panel.getRootElement()->addChild(container1);
 	panel.getRootElement()->addChild(container2);
 	container2->addChild(container3);
@@ -61,8 +62,8 @@ int main()
 					{
 						if (sfui::UIVisualContainer* c = panel.getRootElement()->query<sfui::UIVisualContainer>("Container 1"))
 						{
-							const sfui::TransformProperty& transform = c->getConstTransformProperty();
-							std::cout << "Stopped rotating. Final angle: " << transform.rotate.angle.value << " degrees." << std::endl;
+							const sfui::TransformProperty& transform = c->getConstProperty<sfui::TransformProperty>();
+							std::cout << "Stopped rotating. Final angle: " << transform.getRotate().value << " degrees." << std::endl;
 						}
 					}
 				}
@@ -73,8 +74,8 @@ int main()
 		{
 			if (sfui::UIVisualContainer* c = panel.getRootElement()->query<sfui::UIVisualContainer>("Container 1"))
 			{
-				sfui::TransformProperty& transform = c->getTransformProperty();
-				transform.rotate.angle.value += 15.f;
+				sfui::TransformProperty& transform = c->getProperty<sfui::TransformProperty>();
+				transform.setRotate(transform.getRotate().value + 15.f);
 			}
 		}
 
