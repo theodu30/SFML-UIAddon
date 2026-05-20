@@ -18,55 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\BorderProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\BackgroundProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\AlignProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\Containers\UIImage.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\Containers\UIVisualContainer.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Anchor.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Exports.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\UIPanel.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\UIElement.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\Graphics\RoundedRectangle.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\XMLExport.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\Property.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\OpacityProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\DisplayProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\VisibilityProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\PositionProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\FlexProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\SizeProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\SpacingProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\TransformProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties\ImageProperty.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\UIPropUtils.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\System\Properties.hpp" />
-    <ClInclude Include="Code\Headers\SFUIL\XMLImport.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Code\Cpps\Properties\AlignProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\BackgroundProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\BorderProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Anchor.cpp" />
-    <ClCompile Include="Code\Cpps\XMLExport.cpp" />
-    <ClCompile Include="Code\Cpps\UIImage.cpp" />
-    <ClCompile Include="Code\Cpps\UIVisualContainer.cpp" />
-    <ClCompile Include="Code\Cpps\UIPanel.cpp" />
-    <ClCompile Include="Code\Cpps\UIElement.cpp" />
-    <ClCompile Include="Code\Cpps\RoundedRectangle.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\DisplayProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\FlexProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\ImageProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\OpacityProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\PositionProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\SizeProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\SpacingProperty.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\TransformProperty.cpp" />
-    <ClCompile Include="Code\Cpps\UIPropUtils.cpp" />
-    <ClCompile Include="Code\Cpps\Properties\VisibilityProperty.cpp" />
-    <ClCompile Include="Code\Cpps\XMLImport.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
