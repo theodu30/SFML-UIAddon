@@ -1,13 +1,13 @@
 #include <SFML/Graphics.hpp>
-#include <SFUIL/UIPanel.hpp>
-#include <SFUIL/Containers/UIVisualContainer.hpp>
-#include <SFUIL/Graphics/RoundedRectangle.hpp>
-#include <SFUIL/System/Properties.hpp>
-#include <SFUIL/Containers/UIImage.hpp>
+//#include <SFUIL/UIPanel.hpp>
+//#include <SFUIL/Containers/UIVisualContainer.hpp>
+//#include <SFUIL/Graphics/RoundedRectangle.hpp>
+//#include <SFUIL/System/Properties.hpp>
+//#include <SFUIL/Containers/UIImage.hpp>
 
 #include <iostream>
-#include <SFUIL/XMLExport.hpp>
-#include <SFUIL/XMLImport.hpp>
+//#include <SFUIL/XMLExport.hpp>
+//#include <SFUIL/XMLImport.hpp>
 
 int main()
 {
@@ -17,10 +17,10 @@ int main()
 	shape.setPosition(sf::Vector2f(window.getSize()) * .5f);
 	shape.setOrigin(sf::Vector2f(shape.getRadius(), shape.getRadius()));
 
-	sfui::UIPanel panel;
-	panel.setActive(true);
-	panel.setSize(window.getSize());
-	panel.getRootElement()->getProperty<sfui::FlexProperty>().setFlexDirection(sfui::FlexProperty::Direction::Column);
+	//sfui::UIPanel panel;
+	//panel.setActive(true);
+	//panel.setSize(window.getSize());
+	//panel.getRootElement()->getProperty<sfui::FlexProperty>().setFlexDirection(sfui::FlexProperty::Direction::Column);
 	
 	//sfui::UIVisualContainer* container1 = new sfui::UIVisualContainer("Container 1");
 	//sfui::UIVisualContainer* container2 = new sfui::UIVisualContainer("Container 2");
@@ -70,7 +70,7 @@ int main()
 	//sfui::XMLExport::exportToXML(panel.getRootElement(), "panel.xml");
 	//sfui::XMLImport::importFromXML("panel.xml");
 	std::string panelToLoad = "panel_test.xml";
-	panel.setRootElement(sfui::XMLImport::importFromXML(panelToLoad.c_str())->as<sfui::UIVisualContainer>());
+	//panel.setRootElement(sfui::XMLImport::importFromXML(panelToLoad.c_str())->as<sfui::UIVisualContainer>());
 	//sfui::XMLExport::exportToXML(panel.getRootElement(), "panel_out.xml");
 
 	bool rotating = false;
@@ -97,8 +97,8 @@ int main()
 				}
 				else if (key == sf::Keyboard::Key::A)
 				{
-					panel.setActive(!panel.isActive());
-					std::cout << "Toggled UIPanel active state to " << (panel.isActive() ? "true" : "false") << std::endl;
+					//panel.setActive(!panel.isActive());
+					//std::cout << "Toggled UIPanel active state to " << (panel.isActive() ? "true" : "false") << std::endl;
 				}
 				else if (key == sf::Keyboard::Key::R)
 				{
@@ -106,25 +106,25 @@ int main()
 				}
 				else if (key == sf::Keyboard::Key::Backspace)
 				{
-					if (panel.getRootElement())
-					{
-						panel.getRootElement()->removeFromHierarchy();
-					}
+					//if (panel.getRootElement())
+					//{
+					//	panel.getRootElement()->removeFromHierarchy();
+					//}
 				}
 				else if (key == sf::Keyboard::Key::L)
 				{
-					if (panel.getRootElement())
-					{
-						panel.getRootElement()->removeFromHierarchy();
-					}
-					panel.setRootElement(sfui::XMLImport::importFromXML(panelToLoad.c_str())->as<sfui::UIVisualContainer>());
+					//if (panel.getRootElement())
+					//{
+					//	panel.getRootElement()->removeFromHierarchy();
+					//}
+					//panel.setRootElement(sfui::XMLImport::importFromXML(panelToLoad.c_str())->as<sfui::UIVisualContainer>());
 				}
 				else if (key == sf::Keyboard::Key::S)
 				{
-					if (panel.getRootElement())
-					{
-						sfui::XMLExport::exportToXML(panel.getRootElement(), "panel_out.xml");
-					}
+					//if (panel.getRootElement())
+					//{
+					//	sfui::XMLExport::exportToXML(panel.getRootElement(), "panel_out.xml");
+					//}
 				}
 			}
 		}
@@ -134,27 +134,27 @@ int main()
 			bool single = true;
 			if (single)
 			{
-				if (sfui::UIVisualContainer* c = panel.getRootElement()->query<sfui::UIVisualContainer>("__ELEMENT_TO_ROTATE__"))
-				{
-					sfui::TransformProperty& transform = c->getProperty<sfui::TransformProperty>();
-					transform.setRotate(transform.getRotate().value + rotationSpeed * dt);
-				}
+				//if (sfui::UIVisualContainer* c = panel.getRootElement()->query<sfui::UIVisualContainer>("__ELEMENT_TO_ROTATE__"))
+				//{
+				//	sfui::TransformProperty& transform = c->getProperty<sfui::TransformProperty>();
+				//	transform.setRotate(transform.getRotate().value + rotationSpeed * dt);
+				//}
 			}
 			else
 			{
-				for (sfui::UIVisualContainer* c : panel.getRootElement()->queryAll<sfui::UIVisualContainer>())
-				{
-					sfui::TransformProperty& transform = c->getProperty<sfui::TransformProperty>();
-					transform.setRotate(transform.getRotate().value + rotationSpeed * dt);
-				}
+				//for (sfui::UIVisualContainer* c : panel.getRootElement()->queryAll<sfui::UIVisualContainer>())
+				//{
+				//	sfui::TransformProperty& transform = c->getProperty<sfui::TransformProperty>();
+				//	transform.setRotate(transform.getRotate().value + rotationSpeed * dt);
+				//}
 			}
 		}
 
 		window.clear();
 		window.draw(shape);
 
-		panel.render();
-		panel.drawToTarget(window);
+		//panel.render();
+		//panel.drawToTarget(window);
 
 		window.display();
 	}
