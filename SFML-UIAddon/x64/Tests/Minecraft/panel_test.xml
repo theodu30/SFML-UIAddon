@@ -1,9 +1,8 @@
 <sfui:UIVisualContainer name="__ROOT_ELEMENT__" style="position: absolute; width: 100%; height: 100%; flex-direction: column; ">
 	<sfui:UIImage style="position: absolute; width: 100%; height: 100%; image-path: 'assets/minecraft-screenshot-rMinecraft-tjamesmett.png'; image-scale-mode: scale-to-fit;"/>
 	<sfui:UIImage style="position: absolute; width: 100%; height: 100%; image-path: 'assets/hand.png'; image-scale-mode: scale-to-fit;"/>
-	// Add hotbar: asset: 'assets/textures/hotbar.png', size (564, 66), scaleMode: scale-to-fit, at the bottom, 198px from the left, origin (50%, 50%), absolute.
+	// Add hotbar: asset: 'assets/textures/hotbar.png', size (564, 66), imageScaleMode: scale-to-fit, at the bottom, 198px from the left, origin (50%, 50%), absolute.
 	// Show rotation "__ELEMENT_TO_ROTATE__"
-	<sfui:UIImage name="__ELEMENT_TO_ROTATE__" style="position:absolute; width: 564px; height:66px; image-path: 'assets/textures/hotbar.png'; scale-mode: scale-to-fit; bottom: 0px; left: 198px; origin-x: 50%; origin-y: 50%;"/>
 	<sfui:UIImage name="experiencebar" style="position: absolute; width: 564px; height: 15px; image-path: 'assets/textures/experience_bar_background.png'; image-scale-mode: scale-to-fit; bottom: 67px; left: 198px;"/>
 	<sfui:UIVisualContainer name="healthbar" style="position:absolute; width: 240px; height: 27px; flex-direction: row; bottom: 84px; left: 208px;">
 		<sfui:UIImage style="image-path:'assets/textures/heart/container.png'; image-scale-mode: scale-and-crop;">
